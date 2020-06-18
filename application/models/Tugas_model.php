@@ -36,4 +36,14 @@ class Tugas_model extends CI_Model{
         $this->db->from('dosen')->where('nip', $nip);
         return $this->db->get()->row();
     }
+
+    public function getTugasById($id)
+    {
+        $this->db->select('*');
+        $this->db->from('m_tugas a');
+        $this->db->join('dosen b', 'a.dosen_id=b.id_dosen');
+        $this->db->join('matkul c', 'a.matkul_id=c.id_matkul');
+        $this->db->where('id_tugas', $id);
+        return $this->db->get()->row();
+    }
 }

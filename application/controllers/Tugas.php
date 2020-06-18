@@ -159,12 +159,50 @@ class Tugas extends CI_Controller {
 				}
 				$action = $this->master->create('m_tugas', $input);
 			}else if($method === 'edit'){
-				$id_ujian = $this->input->post('id_tugas', true);
-				$action = $this->master->update('m_tugas', $input, 'id_tugas', $id_ujian);
+				$img_src = FCPATH.'uploads/tugas/';
+				$getTugas = $this->tugas->getTugasById($this->input->post('id_tugas', true));
+				if(!empty($_FILES['file_tugas']['name'])){
+					if (!$this->upload->do_upload('file_tugas')){
+						$error = $this->upload->display_errors();
+						show_error($error, 500, 'File Tugas Error');
+						exit();
+					}else{
+						if(!unlink($img_src.$getTugas->file_tugas)){
+							show_error('Error saat delete file <br/>'.var_dump($getsoal), 500, 'Error Edit File');
+							exit();
+						}
+						$input['file_tugas'] = $this->upload->data('file_name');
+					}
+				}else{
+					$input['file_tugas'] = $getTugas->file_tugas;
+				}
+				$id_tugas = $this->input->post('id_tugas', true);
+				$action = $this->master->update('m_tugas', $input, 'id_tugas', $id_tugas);
 			}
 			$data['status'] = $action ? TRUE : FALSE;
 		}
 		$this->output_json($data);
+	}
+
+
+	public function edit($id)
+	{
+		$this->akses_dosen();
+		
+		$user = $this->ion_auth->user()->row();
+
+        $data = [
+			'user' 		=> $user,
+			'judul'		=> 'Tugas',
+			'subjudul'	=> 'Edit Tugas',
+			'matkul'	=> $this->tugas->getMatkulDosen($user->username),
+			'dosen'		=> $this->tugas->getIdDosen($user->username),
+			'tugas'		=> $this->tugas->getTugasById($id),
+		];
+
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('tugas/edit');
+		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
 }
