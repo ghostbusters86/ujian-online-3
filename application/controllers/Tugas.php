@@ -205,4 +205,26 @@ class Tugas extends CI_Controller {
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
+	public function delete()
+	{
+		$this->akses_dosen();
+		$chk = $this->input->post('checked', true);
+        if(!$chk){
+            $this->output_json(['status'=>false]);
+        }else{
+            if($this->master->delete('m_tugas', $chk, 'id_tugas')){
+                $this->output_json(['status'=>true, 'total'=>count($chk)]);
+            }
+        }
+	}
+
+	public function refresh_token($id)
+	{
+		$this->load->helper('string');
+		$data['token'] = strtoupper(random_string('alpha', 5));
+		$refresh = $this->master->update('m_tugas', $data, 'id_tugas', $id);
+		$data['status'] = $refresh ? TRUE : FALSE;
+		$this->output_json($data);
+	}
+
 }
