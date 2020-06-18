@@ -227,4 +227,37 @@ class Tugas extends CI_Controller {
 		$this->output_json($data);
 	}
 
+
+
+
+
+
+
+
+
+	public function list_json()
+	{
+		$this->akses_mahasiswa();
+		
+		$list = $this->tugas->getListTugas($this->mhs->id_mahasiswa, $this->mhs->kelas_id);
+		$this->output_json($list, false);
+	}
+	
+	public function list()
+	{
+		$this->akses_mahasiswa();
+
+		$user = $this->ion_auth->user()->row();
+		
+		$data = [
+			'user' 		=> $user,
+			'judul'		=> 'Tugas',
+			'subjudul'	=> 'List Tugas',
+			'mhs' 		=> $this->tugas->getIdMahasiswa($user->username),
+		];
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('tugas/list');
+		$this->load->view('_templates/dashboard/_footer.php');
+	}
+
 }

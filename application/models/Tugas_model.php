@@ -14,6 +14,18 @@ class Tugas_model extends CI_Model{
         return $this->datatables->generate();
     }
 
+    public function getListTugas($id, $kelas)
+    {
+        $this->datatables->select("a.id_tugas, e.nama_dosen, d.nama_kelas, a.nama_tugas,  b.nama_matkul, (SELECT COUNT(id) FROM h_tugas h WHERE h.id_mahasiswa = {$id} AND h.id_tugas = a.id_tugas) AS ada, a.tanggal_mulai, a.terlambat");
+        $this->datatables->from('m_tugas a');
+        $this->datatables->join('matkul b', 'a.matkul_id = b.id_matkul');
+        $this->datatables->join('kelas_dosen c', "a.dosen_id = c.dosen_id");
+        $this->datatables->join('kelas d', 'c.kelas_id = d.id_kelas');
+        $this->datatables->join('dosen e', 'e.id_dosen = c.dosen_id');
+        $this->datatables->where('d.id_kelas', $kelas);
+        return $this->datatables->generate();
+    }
+
     public function getIdMahasiswa($nim){
         $this->db->select('*');
         $this->db->from('mahasiswa a');

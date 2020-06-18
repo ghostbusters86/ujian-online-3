@@ -56,15 +56,15 @@ $(document).ready(function () {
 								</div>`;
                 }
             },
-            {
-                "targets": 6,
-                "data": "token",
-                "render": function (data, type, row, meta) {
-                    return `<div class="text-center">
-								<strong class="badge bg-purple">${data}</strong>
-								</div>`;
-                }
-            },
+            // {
+            //     "targets": 6,
+            //     "data": "token",
+            //     "render": function (data, type, row, meta) {
+            //         return `<div class="text-center">
+			// 					<strong class="badge bg-purple">${data}</strong>
+			// 					</div>`;
+            //     }
+            // },
             {
                 "targets": 8,
                 "data": "id_tugas",
