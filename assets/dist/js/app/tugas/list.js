@@ -52,13 +52,13 @@ $(document).ready(function () {
                     var btn;
                     if (data > 0) {
                         btn = `
-								<div class="btn btn-xs btn-primary" >
+								<span class="btn btn-xs btn-primary" >
 									<i class="fa fa-check-circle"></i> Sudah Mengumpulkan
-								</div>`;
+								</span>`;
                     } else {
-                        btn = `<div class="btn btn-xs btn-warning" >
+                        btn = `<span class="btn btn-xs btn-warning" >
 								<i class="fa fa-times-circle"></i> Belum Mengumpulkan
-							</div>`;
+							</span>`;
                     }
                     return `<div class="text-center">
 									${btn}
@@ -67,11 +67,13 @@ $(document).ready(function () {
             },
             {
                 "targets": 7,
-                "data": 'ada',
+                "data": {
+                    "id_tugas": "id_tugas"
+                },
                 "render": function (data, type, row, meta) {
                     return `<div class="text-center">
-                                <a class="btn btn-xs btn-primary" >
-                                    <i class="fa fa-search-plus"></i> Detail Tugas
+                                <a class="btn btn-xs btn-primary" href="${base_url}tugas/detailTugas/${data.id_tugas}">
+                                    <i class="fa fa-print"></i> Detail Tugas
                                 </a>
                                 <a class="btn btn-xs btn-success" >
                                     <i class="fa fa-upload"></i> Upload Tugas

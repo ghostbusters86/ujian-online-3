@@ -95,6 +95,7 @@ class Tugas extends CI_Controller {
 		$dosen 	= $this->tugas->getIdDosen($user->username);
 
 		$this->form_validation->set_rules('nama_tugas', 'Nama Tugas', 'required|alpha_numeric_spaces|max_length[50]');
+		$this->form_validation->set_rules('deskripsi', 'Deskripsi Tugas', 'required');
 		$this->form_validation->set_rules('tgl_mulai', 'Tanggal Mulai', 'required');
 		$this->form_validation->set_rules('tgl_selesai', 'Tanggal Selesai', 'required');
 	}
@@ -123,6 +124,7 @@ class Tugas extends CI_Controller {
 		$dosen_id 		= $this->input->post('dosen_id', true);
 		$matkul_id 		= $this->input->post('matkul_id', true);
 		$nama_tugas 	= $this->input->post('nama_tugas', true);
+		$deskripsi 		= $this->input->post('deskripsi', true);
 		$tgl_mulai 		= $this->convert_tgl($this->input->post('tgl_mulai', 	true));
 		$tgl_selesai	= $this->convert_tgl($this->input->post('tgl_selesai', true));
 		// $file_tugas		= $this->input->post('file_tugas', true);
@@ -132,13 +134,14 @@ class Tugas extends CI_Controller {
 			$data['status'] = false;
 			$data['errors'] = [
 				'nama_tugas' 	=> form_error('nama_tugas'),
+				'deskripsi' 	=> form_error('deskripsi'),
 				'tgl_mulai' 	=> form_error('tgl_mulai'),
 				'tgl_selesai' 	=> form_error('tgl_selesai'),
 			];
 		}else{
 			$input = [
 				'nama_tugas' 	=> $nama_tugas,
-				// 'file_tugas' 	=> $file_tugas,
+				'deskripsi_tugas'=> $deskripsi,
 				'tanggal_mulai' => $tgl_mulai,
 				'terlambat' 	=> $tgl_selesai,
 			];

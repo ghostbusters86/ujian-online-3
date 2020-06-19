@@ -23,6 +23,7 @@
 				</th>
                 <th>No.</th>
                 <th>Nama Tugas</th>
+                <th>Deskripsi Tugas</th>
                 <th>File</th>
                 <th>Mata Kuliah</th>
                 <th>Waktu Mulai</th>
@@ -38,6 +39,7 @@
 				</th>
                 <th>No.</th>
                 <th>Nama Tugas</th>
+                <th>Deskripsi Tugas</th>
                 <th>File</th>
                 <th>Mata Kuliah</th>
                 <th>Waktu Mulai</th>

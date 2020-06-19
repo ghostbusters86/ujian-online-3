@@ -35,6 +35,10 @@ $(document).ready(function () {
             },
             { "data": 'nama_tugas' },
             {
+                "data": 'deskripsi_tugas',
+                "orderable": false
+            },
+            {
                 "data": 'file_tugas',
                 "orderable": false
             },
@@ -66,7 +70,7 @@ $(document).ready(function () {
             //     }
             // },
             {
-                "targets": 8,
+                "targets": 9,
                 "data": "id_tugas",
                 "render": function (data, type, row, meta) {
                     return `<div class="text-center">

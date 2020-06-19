@@ -5,7 +5,7 @@ class Tugas_model extends CI_Model{
 
     public function getDataTugas($id)
     {
-        $this->datatables->select('a.id_tugas, a.token, a.nama_tugas, b.nama_matkul, a.file_tugas, a.tanggal_mulai, a.terlambat');
+        $this->datatables->select('a.id_tugas, a.token, a.nama_tugas, a.deskripsi_tugas, b.nama_matkul, a.file_tugas, a.tanggal_mulai, a.terlambat');
         $this->datatables->from('m_tugas a');
         $this->datatables->join('matkul b', 'a.matkul_id = b.id_matkul');
         if($id!==null){
