@@ -71,4 +71,124 @@
     </div>
 </div>
 
+         <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                       <h4 class="modal-title" id="myModalLabel">Detail Tugas</h4>
+                   </div>
+                   <div class="modal-body">
+                       <div id="tampilData"></div>
+
+                   </div>
+                   <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                   </div>
+                    </div>
+            </div>
+         </div>
+
+         <div class="modal fade" id="modalWarning" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                       <h4 class="modal-title" id="myModalLabel">Upload Tugas</h4>
+                   </div>
+                   <div class="modal-body">
+                       <div id="tampilWarning"></div>
+
+                   </div>
+                   <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                   </div>
+                    </div>
+            </div>
+         </div>
+
+         <div class="modal fade" id="uploadTugas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                       <h4 class="modal-title" id="myModalLabel">Upload Tugas</h4>
+                   </div>
+                   <div class="modal-body">
+                        <div class="form-group">
+                            <label class="control-label col-xs-3" >Upload</label>
+                            <input name="id_tugas" id="id_tugas" class="form-control" type="hidden"  required readonly>
+                            <input name="nim" id="nim" class="form-control" type="hidden"  required readonly>
+                            <div class="col-xs-9">
+                                <input name="file_tugas" id="file_tugas" class="form-control" type="text" placeholder="File Tugas" required>
+                            </div>
+                        </div>
+                   </div>
+                   <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                   </div>
+                    </div>
+            </div>
+         </div>
+
 <script src="<?=base_url()?>assets/dist/js/app/tugas/list.js"></script>
+<script>
+    $('#tugas').on('click','.detailTugas',function(){
+        var kode=$(this).data('kode');
+            $.ajax({
+                type : "GET",
+                url  : "<?php echo base_url() ?>tugas/detailTugas/"+kode,
+                dataType : "JSON",
+                success: function(data){
+                    var tampil = ''
+                        tampil += '<p><b>Judul Tugas : '+data.nama_tugas+'</b></p>'
+                        tampil += '<p>Deskripsi : '+data.deskripsi_tugas+'</p>'
+                        if(data.file_tugas == ''){
+                            tampil += ''
+                        }else{
+                            tampil += '<center><a href="'+data.file_tugas+'" class="btn btn-success">Download</a></center>'
+                        }
+                    $('#tampilData').html(tampil);
+                    $('#modalDetail').modal('show');
+                }
+            });
+            return false;
+            
+    });
+
+    $('#tugas').on('click','.uploadTugas',function(){
+        var kode=$(this).data('kode');
+            $.ajax({
+                type : "GET",
+                url  : "<?php echo base_url() ?>tugas/cekWaktu/"+kode,
+                dataType : "JSON",
+                success: function(data){
+                    if(data == 'telat'){
+                        var tampilWarning = ''
+                        tampilWarning += `<div class="callout callout-danger">
+                            Waktu untuk <strong>"UPLOAD TUGAS"</strong> sudah habis.<br/>
+                        </div>`;
+                        $('#tampilWarning').html(tampilWarning);
+                        $('#modalWarning').modal('show');
+                    }else{
+                        $.ajax({
+                            type : "GET",
+                            url  : "<?php echo base_url() ?>tugas/uploadTugasMahasiswa/"+kode,
+                            dataType : "JSON",
+                            success: function(data){
+                                if(data.hasil == 'zonk'){
+                                    // $('[name="kobar_edit"]').val(data.barang_kode);
+                                }else{
+
+                                }
+                                $('#uploadTugas').modal('show');
+                            }
+                        });
+                        return false;
+                    }
+                }
+            });
+            return false;
+            
+    });
+</script>

@@ -40,6 +40,7 @@ $(document).ready(function () {
                 "orderable": false 
             },
             {
+                "data": 'action',
                 "searchable": false,
                 "orderable": false
             }
@@ -64,23 +65,7 @@ $(document).ready(function () {
 									${btn}
 								</div>`;
                 }
-            },
-            {
-                "targets": 7,
-                "data": {
-                    "id_tugas": "id_tugas"
-                },
-                "render": function (data, type, row, meta) {
-                    return `<div class="text-center">
-                                <a class="btn btn-xs btn-primary" href="${base_url}tugas/detailTugas/${data.id_tugas}">
-                                    <i class="fa fa-print"></i> Detail Tugas
-                                </a>
-                                <a class="btn btn-xs btn-success" >
-                                    <i class="fa fa-upload"></i> Upload Tugas
-                                </a>
-							</div>`;
-                }
-            },
+            }
         ],
         order: [
             [1, 'asc']
@@ -88,12 +73,24 @@ $(document).ready(function () {
         rowId: function (a) {
             return a;
         },
-        rowCallback: function (row, data, iDisplayIndex) {
+        "rowCallback": function (row, data, iDisplayIndex) {
             var info = this.fnPagingInfo();
             var page = info.iPage;
             var length = info.iLength;
             var index = page * length + (iDisplayIndex + 1);
             $('td:eq(0)', row).html(index);
+            // var today = new Date();
+            // var hari = date.getDate();
+            // var bulan = date.getMonth();
+            // var tahun = date.getFullYear();
+            // var jam = today.getHours();
+            // var menit = today.getMinutes();
+            // var detik = today.getSeconds();
+            // console.log(data)
+            // if (data[6] = '<i class="fa fa-times-circle"></i> Belum Mengumpulkan') {
+            //     $('td', row).css('background-color', '#b50000');
+            //     $('td', row).css('color', '#FFFFFF');
+            //   }
         }
     });
 });

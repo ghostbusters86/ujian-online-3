@@ -10,7 +10,7 @@ class Tugas extends CI_Controller {
 		if (!$this->ion_auth->logged_in()){
 			redirect('auth');
 		}
-		$this->load->library(['datatables', 'form_validation']);// Load Library Ignited-Datatables
+		$this->load->library(['datatables', 'form_validation', 'encrypt']);// Load Library Ignited-Datatables
 		$this->load->helper('my');
 		$this->load->model('Master_model', 'master');
 		$this->load->model('Tugas_model', 'tugas');
@@ -261,6 +261,36 @@ class Tugas extends CI_Controller {
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('tugas/list');
 		$this->load->view('_templates/dashboard/_footer.php');
+	}
+
+	public function detailTugas($id){
+		$data = $this->tugas->getTugasById($id);
+		header('Content-Type: application/json');
+		echo json_encode($data);
+	}
+
+	public function cekWaktu($id){
+		$data = $this->tugas->cekWaktu($id);
+		header('Content-Type: application/json');
+		if($data->terlambat < date("d-m-Y H:i:s")){
+			$hasil = 'telat';
+		}else{
+			$hasil = 'tidak telat';
+		}
+		echo json_encode($hasil);
+	}
+
+	public function uploadTugasMahasiswa($id){
+		$user = $this->ion_auth->user()->row();
+		$cekdata = $this->tugas->cekUpload($id, $user->username)->num_rows();
+		if($cekdata > 0){
+			$data = $this->tugas->cekUpload($id, $user->username)->row();
+			$hasil = 'ditemukan';
+		}else{
+			$data = '';
+			$hasil = 'zonk';
+		}
+		echo json_encode(array('data'=>$data, 'hasil'=>$hasil));
 	}
 
 }

@@ -16,13 +16,14 @@ class Tugas_model extends CI_Model{
 
     public function getListTugas($id, $kelas)
     {
-        $this->datatables->select("a.id_tugas, e.nama_dosen, d.nama_kelas, a.nama_tugas,  b.nama_matkul, (SELECT COUNT(id) FROM h_tugas h WHERE h.id_mahasiswa = {$id} AND h.id_tugas = a.id_tugas) AS ada, a.tanggal_mulai, a.terlambat");
+        $this->datatables->select("a.id_tugas, e.nama_dosen, d.nama_kelas, a.nama_tugas,  b.nama_matkul, (SELECT COUNT(id) FROM h_tugas h WHERE h.nim = {$id} AND h.id_tugas = a.id_tugas) AS ada, date_format(a.tanggal_mulai,'%d-%m-%Y %H:%i') as tanggal_mulai, date_format(a.terlambat,'%d-%m-%Y %H:%i') as terlambat");
         $this->datatables->from('m_tugas a');
         $this->datatables->join('matkul b', 'a.matkul_id = b.id_matkul');
         $this->datatables->join('kelas_dosen c', "a.dosen_id = c.dosen_id");
         $this->datatables->join('kelas d', 'c.kelas_id = d.id_kelas');
         $this->datatables->join('dosen e', 'e.id_dosen = c.dosen_id');
         $this->datatables->where('d.id_kelas', $kelas);
+        $this->datatables->add_column('action', '<a href="javascript:void(0);" class="detailTugas btn btn-info btn-xs" data-kode="$1"><i class="fa fa-print"></i> Detail Tugas </a> <a href="javascript:void(0);" class="uploadTugas btn btn-success btn-xs" data-kode="$1"><i class="fa fa-upload"></i> Upload Tugas</a>','id_tugas');
         return $this->datatables->generate();
     }
 
@@ -57,5 +58,17 @@ class Tugas_model extends CI_Model{
         $this->db->join('matkul c', 'a.matkul_id=c.id_matkul');
         $this->db->where('id_tugas', $id);
         return $this->db->get()->row();
+    }
+
+    public function cekWaktu($id){
+        $this->db->select("date_format(terlambat,'%d-%m-%Y %H:%i:%s') as terlambat");
+        $this->db->where('id_tugas', $id);
+        return $this->db->get('m_tugas')->row();
+    }
+
+    public function cekUpload($id, $mahasiswa){
+        $this->db->where('id_tugas', $id);
+        $this->db->where('nim', $mahasiswa);
+        return $this->db->get('h_tugas');
     }
 }
