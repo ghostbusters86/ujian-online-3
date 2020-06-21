@@ -35,10 +35,11 @@ $(document).ready(function () {
             { "data": 'tanggal_mulai' },
             { "data": 'terlambat' },
             { 
-                "data": 'tugas_mahasiswa',
+                // "data": 'ada',
                 "searchable": false,
                 "orderable": false 
             },
+            { "data": 'ada' },
             {
                 "data": 'action',
                 "searchable": false,
@@ -46,6 +47,11 @@ $(document).ready(function () {
             }
         ],
         columnDefs: [
+            { "visible": false, "targets": 7 },
+            {
+                "targets": 5,
+                "render": $.fn.dataTable.render.moment( 'Do MMM YYYY' )
+              },
             {
                 "targets": 6,
                 "data": 'ada',
@@ -87,10 +93,11 @@ $(document).ready(function () {
             // var menit = today.getMinutes();
             // var detik = today.getSeconds();
             // console.log(data)
-            // if (data[6] = '<i class="fa fa-times-circle"></i> Belum Mengumpulkan') {
-            //     $('td', row).css('background-color', '#b50000');
-            //     $('td', row).css('color', '#FFFFFF');
-            //   }
+            // if (data[7] ===1) {
+            if ( data.ada == "0" ) {
+                $('td', row).css('background-color', '#b50000');
+                $('td', row).css('color', '#FFFFFF');
+              }
         }
     });
 });

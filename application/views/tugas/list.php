@@ -50,6 +50,7 @@
                         <th>Mulai</th>
                         <th>Selesai</th>
                         <th>Tugas</th>
+                        <th>Ada</th>
                         <th class="text-center">Aksi</th>
                     </tr>        
                 </thead>
@@ -62,6 +63,7 @@
                         <th>Mulai</th>
                         <th>Selesai</th>
                         <th>Tugas</th>
+                        <th>Ada</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </tfoot>
@@ -107,6 +109,7 @@
             </div>
          </div>
 
+         
          <div class="modal fade" id="uploadTugas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                <div class="modal-content">
@@ -114,24 +117,35 @@
                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                        <h4 class="modal-title" id="myModalLabel">Upload Tugas</h4>
                    </div>
+                   <?php echo form_open_multipart('tugas/save', array('id'=>'formUpload'))?>
                    <div class="modal-body">
                         <div class="form-group">
                             <label class="control-label col-xs-3" >Upload</label>
-                            <input name="id_tugas" id="id_tugas" class="form-control" type="hidden"  required readonly>
-                            <input name="nim" id="nim" class="form-control" type="hidden"  required readonly>
+                            <input name="method" id="method" class="form-control" type="hidden"  readonly>
+                            <input name="id_hasil_tugas" id="id_hasil_tugas" class="form-control" type="hidden"  readonly>
+                            <input name="id_tugas" id="id_tugas" class="form-control" type="hidden"   readonly>
+                            <input name="nim" id="nim" class="form-control" type="hidden"   readonly>
                             <div class="col-xs-9">
-                                <input name="file_tugas" id="file_tugas" class="form-control" type="text" placeholder="File Tugas" required>
+                                <input name="file_tugas" id="file_tugas" class="form-control" type="file" placeholder="File Tugas" required>
                             </div>
+                            
                         </div>
+
+                        
                    </div>
-                   <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                   <div id="download" style="margin-top:15px"></div>
+                   <div class="modal-footer" >
+                    <button type="button" type="submit" id="btn_save" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                    </div>
                     </div>
+                    <?php echo form_close(); ?>
             </div>
          </div>
-
+         
+         <script src="//cdn.datatables.net/plug-ins/1.10.21/dataRender/datetime.js"></script>
 <script src="<?=base_url()?>assets/dist/js/app/tugas/list.js"></script>
+
 <script>
     $('#tugas').on('click','.detailTugas',function(){
         var kode=$(this).data('kode');
@@ -146,7 +160,7 @@
                         if(data.file_tugas == ''){
                             tampil += ''
                         }else{
-                            tampil += '<center><a href="'+data.file_tugas+'" class="btn btn-success">Download</a></center>'
+                            tampil += '<center><a href="'+base_url+'tugas/downloadTugas/'+data.file_tugas+'" class="btn btn-success"><i class="fa fa-download"></i> Download File</a></center>'
                         }
                     $('#tampilData').html(tampil);
                     $('#modalDetail').modal('show');
@@ -176,11 +190,22 @@
                             url  : "<?php echo base_url() ?>tugas/uploadTugasMahasiswa/"+kode,
                             dataType : "JSON",
                             success: function(data){
+                                console.log(data)
+                                var method
+                                $('[name="id_tugas"]').val(data.data[0]);
+                                $('[name="nim"]').val(data.data[1]);
                                 if(data.hasil == 'zonk'){
-                                    // $('[name="kobar_edit"]').val(data.barang_kode);
+                                    method = 'add'
+                                    $('[name="method"]').val(method);
                                 }else{
-
+                                    method = 'edit'
+                                    $('[name="method"]').val(method);
+                                    $('[name="id_hasil_tugas"]').val(data.rowdata.id);
+                                    var download = ''
+                                    download += '<br>'
+                                    download += '<center><a href="'+base_url+'tugas/downloadTugasMahasiswa/'+data.rowdata.tugas_mahasiswa+'" class="btn btn-success"><i class="fa fa-download"></i> Download File</a></center>'
                                 }
+                                $('#download').html(download);
                                 $('#uploadTugas').modal('show');
                             }
                         });
@@ -190,5 +215,24 @@
             });
             return false;
             
+    });
+
+    $('#btn_save').on('click', function (e) {
+        e.preventDefault(); 
+            $.ajax({
+                url:'<?php echo base_url();?>index.php/tugas/do_upload_mahasiswa',
+                type:"post",
+                data:new FormData(document.getElementById("formUpload")),
+                processData:false,
+                contentType:false,
+                cache:false,
+                async:false,
+                success: function(data){
+                    alert(data);
+                    document.getElementById("formUpload").reset();
+                    $('#uploadTugas').modal('hide');
+                    reload_ajax();
+                }
+            });
     });
 </script>

@@ -251,6 +251,7 @@ class Tugas extends CI_Controller {
 		$this->akses_mahasiswa();
 
 		$user = $this->ion_auth->user()->row();
+
 		
 		$data = [
 			'user' 		=> $user,
@@ -282,15 +283,93 @@ class Tugas extends CI_Controller {
 
 	public function uploadTugasMahasiswa($id){
 		$user = $this->ion_auth->user()->row();
-		$cekdata = $this->tugas->cekUpload($id, $user->username)->num_rows();
+		$mahasiswa 	= $this->tugas->getIdMahasiswa($this->user->username);
+		$id_mahasiswa = $mahasiswa->id_mahasiswa;
+		$cekdata = $this->tugas->cekUpload($id, $id_mahasiswa)->num_rows();
+		$data = array($id, $id_mahasiswa);
 		if($cekdata > 0){
-			$data = $this->tugas->cekUpload($id, $user->username)->row();
+			$rowdata = $this->tugas->cekUpload($id, $id_mahasiswa)->row();
 			$hasil = 'ditemukan';
 		}else{
-			$data = '';
+			$rowdata = '';
 			$hasil = 'zonk';
 		}
-		echo json_encode(array('data'=>$data, 'hasil'=>$hasil));
+		echo json_encode(array('data'=>$data, 'rowdata'=>$rowdata, 'hasil'=>$hasil));
+	}
+
+	public function do_upload_mahasiswa(){
+		$method = $this->input->post('method');
+		$id_tugas = $this->input->post('id_tugas');
+		$nim = $this->input->post('nim');
+
+		$config['upload_path'] = FCPATH.'uploads/tugasMahasiswa/';
+		$config['encrypt_name'] = TRUE;
+		$config['allowed_types'] = 'doc|docx|ppt|pptx|xls|xlsx|pdf';
+		$config['max_size'] = 2000;
+		$this->load->library('upload', $config);
+
+		$file = FCPATH.'uploads/tugasMahasiswa/';
+		
+
+		if($method == 'add'){
+			if (!$this->upload->do_upload('file_tugas')) {
+				$data = array('pesan' => $this->upload->display_errors());
+			} else {
+				$new_name = $this->upload->data('file_name');
+				$this->tugas->add_tugas($id_tugas, $nim, $new_name);
+				$data = array('pesan' => 'upload berhasil');
+			}
+
+		}else{
+			$id_hasil_tugas = $this->input->post('id_hasil_tugas');
+			$rowdata = $this->tugas->rowdata($id_hasil_tugas)->row();
+			$fileLama = $rowdata->tugas_mahasiswa;
+			if (!$this->upload->do_upload('file_tugas')) {
+				$data = array('pesan' => $this->upload->display_errors());
+			} else {
+				$new_name = $this->upload->data('file_name');
+				$this->tugas->update_tugas($id_hasil_tugas, $new_name);
+				unlink($file.$fileLama);
+				$data = array('pesan' => 'upload berhasil');
+			}
+		}
+		echo json_encode($data);
+	}
+
+	function downloadTugasMahasiswa($file_mahasiswa){
+		$path = FCPATH.'uploads/tugasMahasiswa/';
+		$file = $path.$file_mahasiswa;
+		header('Content-Description: File Transfer');
+		header('Content-Type: application/octet-stream');
+		header('Content-Disposition: attachment; filename='.basename($file));
+		header('Content-Transfer-Encoding: binary');
+		header('Expires: 0');
+		header('Cache-Control: private');
+		header('Pragma: private');
+		header('Content-Length: ' . filesize($file));
+		ob_clean();
+		flush();
+		readfile($file);
+		
+		exit;
+	}
+
+	function downloadTugas($file){
+		$path = FCPATH.'uploads/tugas/';
+		$file = $path.$file;
+		header('Content-Description: File Transfer');
+		header('Content-Type: application/octet-stream');
+		header('Content-Disposition: attachment; filename='.basename($file));
+		header('Content-Transfer-Encoding: binary');
+		header('Expires: 0');
+		header('Cache-Control: private');
+		header('Pragma: private');
+		header('Content-Length: ' . filesize($file));
+		ob_clean();
+		flush();
+		readfile($file);
+		
+		exit;
 	}
 
 }

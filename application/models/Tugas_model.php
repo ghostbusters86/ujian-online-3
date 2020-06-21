@@ -16,7 +16,7 @@ class Tugas_model extends CI_Model{
 
     public function getListTugas($id, $kelas)
     {
-        $this->datatables->select("a.id_tugas, e.nama_dosen, d.nama_kelas, a.nama_tugas,  b.nama_matkul, (SELECT COUNT(id) FROM h_tugas h WHERE h.nim = {$id} AND h.id_tugas = a.id_tugas) AS ada, date_format(a.tanggal_mulai,'%d-%m-%Y %H:%i') as tanggal_mulai, date_format(a.terlambat,'%d-%m-%Y %H:%i') as terlambat");
+        $this->datatables->select("a.id_tugas, e.nama_dosen, d.nama_kelas, a.nama_tugas,  b.nama_matkul, (SELECT COUNT(id) FROM h_tugas h WHERE h.id_mahasiswa = {$id} AND h.id_tugas = a.id_tugas) AS ada, date_format(a.tanggal_mulai,'%d-%m-%Y %H:%i') as tanggal_mulai, date_format(a.terlambat,'%d-%m-%Y %H:%i') as terlambat");
         $this->datatables->from('m_tugas a');
         $this->datatables->join('matkul b', 'a.matkul_id = b.id_matkul');
         $this->datatables->join('kelas_dosen c', "a.dosen_id = c.dosen_id");
@@ -68,7 +68,27 @@ class Tugas_model extends CI_Model{
 
     public function cekUpload($id, $mahasiswa){
         $this->db->where('id_tugas', $id);
-        $this->db->where('nim', $mahasiswa);
+        $this->db->where('id_mahasiswa', $mahasiswa);
         return $this->db->get('h_tugas');
+    }
+
+    function add_tugas($id_tugas, $nim, $new_name){
+        $data = array(
+            'id_tugas' => $id_tugas,
+            'id_mahasiswa' => $nim,
+            'tugas_mahasiswa' => $new_name
+        );
+        return $this->db->insert('h_tugas', $data);
+    }
+
+    function rowdata($id){
+        $this->db->where('id', $id);
+        return $this->db->get('h_tugas');
+    }
+
+    function update_tugas($id, $tugas){
+        $this->db->set('tugas_mahasiswa', $tugas);
+        $this->db->where('id', $id);
+        $this->db->update('h_tugas');
     }
 }
