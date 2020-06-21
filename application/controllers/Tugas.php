@@ -102,13 +102,13 @@ class Tugas extends CI_Controller {
 
 	public function file_config()
     {
-        $allowed_type 	= [
-            "image/jpeg", "image/jpg", "image/png", "image/gif",
-            "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav",
-            "video/mp4", "application/octet-stream"
-        ];
+        // $allowed_type 	= [
+        //     "image/jpeg", "image/jpg", "image/png", "image/gif",
+        //     "audio/mpeg", "audio/mpg", "audio/mpeg3", "audio/mp3", "audio/x-wav", "audio/wave", "audio/wav",
+        //     "video/mp4", "application/octet-stream"
+        // ];
         $config['upload_path']      = FCPATH.'uploads/tugas/';
-        $config['allowed_types']    = 'jpeg|jpg|png|gif|mpeg|mpg|mpeg3|mp3|wav|wave|mp4';
+        $config['allowed_types']    = 'doc|docx|ppt|pptx|xls|xlsx|pdf';
         $config['encrypt_name']     = TRUE;
         
         return $this->load->library('upload', $config);
@@ -278,7 +278,13 @@ class Tugas extends CI_Controller {
 		}else{
 			$hasil = 'tidak telat';
 		}
-		echo json_encode($hasil);
+
+		if($data->tanggal_mulai > date("d-m-Y H:i:s")){
+			$mulai = 'belum mulai';
+		}else{
+			$mulai = 'sudah mulai';
+		}
+		echo json_encode(array('hasil'=>$hasil, 'mulai'=>$mulai));
 	}
 
 	public function uploadTugasMahasiswa($id){
@@ -298,6 +304,7 @@ class Tugas extends CI_Controller {
 	}
 
 	public function do_upload_mahasiswa(){
+		date_default_timezone_set("Asia/Bangkok");
 		$method = $this->input->post('method');
 		$id_tugas = $this->input->post('id_tugas');
 		$nim = $this->input->post('nim');
@@ -315,8 +322,9 @@ class Tugas extends CI_Controller {
 			if (!$this->upload->do_upload('file_tugas')) {
 				$data = array('pesan' => $this->upload->display_errors());
 			} else {
+				$tanggal = date("Y-m-d H:i:s");
 				$new_name = $this->upload->data('file_name');
-				$this->tugas->add_tugas($id_tugas, $nim, $new_name);
+				$this->tugas->add_tugas($id_tugas, $nim, $new_name, $tanggal);
 				$data = array('pesan' => 'upload berhasil');
 			}
 
@@ -327,8 +335,9 @@ class Tugas extends CI_Controller {
 			if (!$this->upload->do_upload('file_tugas')) {
 				$data = array('pesan' => $this->upload->display_errors());
 			} else {
+				$tanggal = date("Y-m-d H:i:s");
 				$new_name = $this->upload->data('file_name');
-				$this->tugas->update_tugas($id_hasil_tugas, $new_name);
+				$this->tugas->update_tugas($id_hasil_tugas, $new_name, $tanggal);
 				unlink($file.$fileLama);
 				$data = array('pesan' => 'upload berhasil');
 			}

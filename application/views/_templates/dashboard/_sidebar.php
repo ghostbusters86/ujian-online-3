@@ -129,6 +129,11 @@
 					<i class="fa fa-file"></i> <span>Hasil Ujian</span>
 				</a>
 			</li>
+			<li class="<?=$page==='hasiltugas'?"active":""?>">
+				<a href="<?=base_url('hasiltugas')?>" rel="noopener noreferrer">
+					<i class="fa fa-file"></i> <span>Hasil Tugas</span>
+				</a>
+			</li>
 			<?php endif; ?>
 			<?php if($this->ion_auth->is_admin()) : ?>
 			<li class="header">ADMINISTRATOR</li>

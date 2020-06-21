@@ -143,7 +143,6 @@
             </div>
          </div>
          
-         <script src="//cdn.datatables.net/plug-ins/1.10.21/dataRender/datetime.js"></script>
 <script src="<?=base_url()?>assets/dist/js/app/tugas/list.js"></script>
 
 <script>
@@ -177,7 +176,14 @@
                 url  : "<?php echo base_url() ?>tugas/cekWaktu/"+kode,
                 dataType : "JSON",
                 success: function(data){
-                    if(data == 'telat'){
+                    if(data.mulai == 'belum mulai'){
+                        var tampilWarning = ''
+                        tampilWarning += `<div class="callout callout-warning">
+                            Belum waktunya untuk <strong>"UPLOAD TUGAS"</strong> <br/>
+                        </div>`;
+                        $('#tampilWarning').html(tampilWarning);
+                        $('#modalWarning').modal('show');
+                    }else if(data.mulai == 'sudah mulai' && data.hasil == 'telat'){
                         var tampilWarning = ''
                         tampilWarning += `<div class="callout callout-danger">
                             Waktu untuk <strong>"UPLOAD TUGAS"</strong> sudah habis.<br/>
