@@ -103,8 +103,8 @@ class Ujian_model extends CI_Model {
     {
         $this->datatables->select('b.id_ujian, b.nama_ujian, b.jumlah_soal, CONCAT(b.waktu, " Menit") as waktu, b.tgl_mulai');
         $this->datatables->select('c.nama_matkul, d.nama_dosen');
-        $this->datatables->from('h_ujian a');
-        $this->datatables->join('m_ujian b', 'a.ujian_id = b.id_ujian');
+        $this->datatables->from('m_ujian b');
+        $this->datatables->join('h_ujian a', 'a.ujian_id = b.id_ujian' , 'left');
         $this->datatables->join('matkul c', 'b.matkul_id = c.id_matkul');
         $this->datatables->join('dosen d', 'b.dosen_id = d.id_dosen');
         $this->datatables->group_by('b.id_ujian');

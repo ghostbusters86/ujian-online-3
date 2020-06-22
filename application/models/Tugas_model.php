@@ -27,6 +27,22 @@ class Tugas_model extends CI_Model{
         return $this->datatables->generate();
     }
 
+    public function getHasilTugas($nip = null)
+    {
+        $this->datatables->select('b.id_tugas, b.nama_tugas, b.tanggal_mulai, b.terlambat, b.deskripsi_tugas, b.file_tugas');
+        $this->datatables->select('c.nama_matkul, d.nama_dosen');
+        $this->datatables->from('m_tugas b');
+        $this->datatables->join('h_tugas a', 'a.id_tugas = b.id_tugas', 'left');
+        $this->datatables->join('matkul c', 'b.matkul_id = c.id_matkul');
+        $this->datatables->join('dosen d', 'b.dosen_id = d.id_dosen');
+        $this->datatables->group_by('b.id_tugas');
+        if($nip !== null){
+            $this->datatables->where('d.nip', $nip);
+        }
+        $this->datatables->add_column('action', '<a href="javascript:void(0);" class="detailTugasMahasiswa btn btn-xs bg-maroon" data-kode="$1"><i class="fa fa-search-plus"></i> Detail </a>' ,'id_tugas');
+        return $this->datatables->generate();
+    }
+
     public function getIdMahasiswa($nim){
         $this->db->select('*');
         $this->db->from('mahasiswa a');
@@ -34,6 +50,14 @@ class Tugas_model extends CI_Model{
         $this->db->join('jurusan c', 'b.jurusan_id=c.id_jurusan');
         $this->db->where('nim', $nim);
         return $this->db->get()->row();
+    }
+
+    public function detailHasilTugas($id){
+        $this->db->select('a.nama, a.nim, b.*');
+        $this->db->from('mahasiswa a');
+        $this->db->join('h_tugas b', 'a.id_mahasiswa=b.id_mahasiswa');
+        $this->db->where('id_tugas', $id);
+        return $this->db->get();
     }
 
     public function getIdDosen($nip)
