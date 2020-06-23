@@ -10,7 +10,7 @@
 				Computer Based Test v.1.0
 			</div>
 			<!-- Default to the left -->
-			<strong>Copyright &copy; 2019. By <a href="https://instagram.com/mghifariarfan">Muhammad Ghifari Arfananda</a>. </strong> All rights reserved
+			<strong>Copyright &copy; 2020. REPARSMART </strong> All rights reserved
 		</footer>
 
 	</div>

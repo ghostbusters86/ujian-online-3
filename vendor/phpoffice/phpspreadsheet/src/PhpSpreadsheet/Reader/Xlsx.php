@@ -1352,7 +1352,7 @@ class Xlsx extends BaseReader
                                                 $rangeSets = preg_split("/('?(?:.*?)'?(?:![A-Z0-9]+:[A-Z0-9]+)),?/", $extractedRange, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
                                                 $newRangeSets = [];
                                                 foreach ($rangeSets as $rangeSet) {
-                                                    [$sheetName, $rangeSet] = Worksheet::extractSheetTitle($rangeSet, true);
+                                                    list($sheetName, $rangeSet) = Worksheet::extractSheetTitle($rangeSet, true);
                                                     if (strpos($rangeSet, ':') === false) {
                                                         $rangeSet = $rangeSet . ':' . $rangeSet;
                                                     }
@@ -1426,7 +1426,7 @@ class Xlsx extends BaseReader
                                         $locatedSheet = $excel->getSheetByName($extractedSheetName);
 
                                         // Modify range
-                                        [$worksheetName, $extractedRange] = Worksheet::extractSheetTitle($extractedRange, true);
+                                        list($worksheetName, $extractedRange) = Worksheet::extractSheetTitle($extractedRange, true);
                                     }
 
                                     if ($locatedSheet !== null) {
@@ -1841,7 +1841,7 @@ class Xlsx extends BaseReader
 
     private static function getArrayItem($array, $key = 0)
     {
-        return $array[$key] ?? null;
+        return isset($array[$key]) ? $array[$key] : null;
     }
 
     private static function dirAdd($base, $add)

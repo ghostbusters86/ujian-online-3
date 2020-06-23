@@ -27,8 +27,8 @@ class Mahasiswa extends CI_Controller
 	{
 		$data = [
 			'user' => $this->ion_auth->user()->row(),
-			'judul'	=> 'Mahasiswa',
-			'subjudul' => 'Data Mahasiswa'
+			'judul'	=> 'Praja',
+			'subjudul' => 'Data Praja'
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('master/mahasiswa/data');
@@ -44,8 +44,8 @@ class Mahasiswa extends CI_Controller
 	{
 		$data = [
 			'user' => $this->ion_auth->user()->row(),
-			'judul'	=> 'Mahasiswa',
-			'subjudul' => 'Tambah Data Mahasiswa'
+			'judul'	=> 'Praja',
+			'subjudul' => 'Tambah Data Praja'
 		];
 		$this->load->view('_templates/dashboard/_header.php', $data);
 		$this->load->view('master/mahasiswa/add');
@@ -57,8 +57,8 @@ class Mahasiswa extends CI_Controller
 		$mhs = $this->master->getMahasiswaById($id);
 		$data = [
 			'user' 		=> $this->ion_auth->user()->row(),
-			'judul'		=> 'Mahasiswa',
-			'subjudul'	=> 'Edit Data Mahasiswa',
+			'judul'		=> 'Praja',
+			'subjudul'	=> 'Edit Data Praja',
 			'jurusan'	=> $this->master->getJurusan(),
 			'kelas'		=> $this->master->getKelasByJurusan($mhs->jurusan_id),
 			'mahasiswa' => $mhs
@@ -185,8 +185,8 @@ class Mahasiswa extends CI_Controller
 	{
 		$data = [
 			'user' => $this->ion_auth->user()->row(),
-			'judul'	=> 'Mahasiswa',
-			'subjudul' => 'Import Data Mahasiswa',
+			'judul'	=> 'Praja',
+			'subjudul' => 'Import Data Praja',
 			'kelas' => $this->master->getAllKelas()
 		];
 		if ($import_data != null) $data['import'] = $import_data;

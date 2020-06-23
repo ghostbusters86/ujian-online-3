@@ -52,14 +52,53 @@ class Hasiltugas extends CI_Controller {
 		 echo json_encode($data);
 	 }
 
-	 function preview($id){
-		$path = FCPATH.'uploads/tugasMahasiswa/';
-		$file = $path.$id;
-		$app= new COM("Word.Application");
-		$app->visible = true; 
-		$app->Documents->Open($file);
-		$app->ActiveDocument->PrintOut();
-		$app->ActiveDocument->Close(); $app->Quit();
+	 public function import($import_data = null)
+	{
+		$data = [
+			'user' => $this->ion_auth->user()->row(),
+			'judul'	=> 'Jurusan',
+			'subjudul' => 'Import Jurusan'
+		];
+		if ($import_data != null) $data['import'] = $import_data;
+
+		print_r($data['import']);
+
+		$this->load->view('_templates/dashboard/_header', $data);
+		$this->load->view('tugas/import');
+		$this->load->view('_templates/dashboard/_footer');
+	}
+
+	 function preview($id, $ext){
+		$file = FCPATH.'uploads/tugasMahasiswa/';
+		$ext = $ext;
+
+			switch ($ext) {
+				case '.xlsx':
+					$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+					break;
+				case '.xls':
+					$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+					break;
+				case '.csv':
+					$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+					break;
+				default:
+					echo "unknown file ext";
+					die;
+			}
+
+			$spreadsheet = $reader->load($file.$id);
+			$sheetData = $spreadsheet->getActiveSheet()->toArray();
+			$jurusan = [];
+			for ($i = 1; $i < count($sheetData); $i++) {
+				if ($sheetData[$i][0] != null) {
+					$jurusan[] = $sheetData[$i][0];
+				}
+			}
+
+			// unlink($file);
+
+			$this->import($jurusan);
 	 }
 
     

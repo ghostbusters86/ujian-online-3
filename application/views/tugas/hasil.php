@@ -98,7 +98,7 @@
                                 tabel += '<th>'+data[i].nama+'</th>'
                                 tabel += '<th>'+data[i].tugas_mahasiswa+'</th>'
                                 tabel += '<th>'+data[i].waktu+'</th>'
-                                tabel += '<th><a href="'+base_url+'hasiltugas/preview/'+data[i].tugas_mahasiswa+'" class="btn btn-xs bg-maroon" target:_blank > Preview </a></th>'
+                                tabel += '<th><a href="'+base_url+'hasiltugas/preview/'+data[i].tugas_mahasiswa+'/'+data[i].ext+'" class="btn btn-xs bg-maroon" target:_blank > Preview </a></th>'
                                 tabel += '</tr>'
                             no++;
                             }

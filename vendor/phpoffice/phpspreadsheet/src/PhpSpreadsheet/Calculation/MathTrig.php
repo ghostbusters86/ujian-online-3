@@ -1074,7 +1074,7 @@ class MathTrig
         return array_filter(
             $args,
             function ($index) use ($cellReference) {
-                [, $row, $column] = explode('.', $index);
+                list(, $row, $column) = explode('.', $index);
 
                 return $cellReference->getWorksheet()->getRowDimension($row)->getVisible() &&
                     $cellReference->getWorksheet()->getColumnDimension($column)->getVisible();
@@ -1088,7 +1088,7 @@ class MathTrig
         return array_filter(
             $args,
             function ($index) use ($cellReference) {
-                [, $row, $column] = explode('.', $index);
+                list(, $row, $column) = explode('.', $index);
                 if ($cellReference->getWorksheet()->cellExists($column . $row)) {
                     //take this cell out if it contains the SUBTOTAL or AGGREGATE functions in a formula
                     $isFormula = $cellReference->getWorksheet()->getCell($column . $row)->isFormula();
@@ -1116,7 +1116,7 @@ class MathTrig
      *                    in hidden rows or columns
      * @param array of mixed Data Series
      *
-     * @return float|string
+     * @return float
      */
     public static function SUBTOTAL(...$args)
     {

@@ -96,12 +96,13 @@ class Tugas_model extends CI_Model{
         return $this->db->get('h_tugas');
     }
 
-    function add_tugas($id_tugas, $nim, $new_name, $tanggal){
+    function add_tugas($id_tugas, $nim, $new_name, $tanggal, $ext){
         $data = array(
             'id_tugas' => $id_tugas,
             'id_mahasiswa' => $nim,
             'tugas_mahasiswa' => $new_name,
-            'waktu' => $tanggal
+            'waktu' => $tanggal,
+            'ext' => $ext
         );
         return $this->db->insert('h_tugas', $data);
     }
@@ -111,8 +112,9 @@ class Tugas_model extends CI_Model{
         return $this->db->get('h_tugas');
     }
 
-    function update_tugas($id, $tugas, $tanggal){
+    function update_tugas($id, $tugas, $tanggal, $ext){
         $this->db->set('waktu', $tanggal);
+        $this->db->set('ext', $ext);
         $this->db->set('updated_at', $tanggal);
         $this->db->set('tugas_mahasiswa', $tugas);
         $this->db->where('id', $id);

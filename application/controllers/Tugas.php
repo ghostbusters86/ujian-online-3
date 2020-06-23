@@ -324,7 +324,8 @@ class Tugas extends CI_Controller {
 			} else {
 				$tanggal = date("Y-m-d H:i:s");
 				$new_name = $this->upload->data('file_name');
-				$this->tugas->add_tugas($id_tugas, $nim, $new_name, $tanggal);
+				$ext = $this->upload->data('file_ext');
+				$this->tugas->add_tugas($id_tugas, $nim, $new_name, $tanggal, $ext);
 				$data = array('pesan' => 'upload berhasil');
 			}
 
@@ -337,7 +338,8 @@ class Tugas extends CI_Controller {
 			} else {
 				$tanggal = date("Y-m-d H:i:s");
 				$new_name = $this->upload->data('file_name');
-				$this->tugas->update_tugas($id_hasil_tugas, $new_name, $tanggal);
+				$ext = $this->upload->data('file_ext');
+				$this->tugas->update_tugas($id_hasil_tugas, $new_name, $tanggal, $ext);
 				unlink($file.$fileLama);
 				$data = array('pesan' => 'upload berhasil');
 			}

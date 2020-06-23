@@ -7,7 +7,10 @@ class MYPDF extends TCPDF {
         $this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         $this->SetFont('helvetica', 'B', 18);
         $this->SetY(13);
-        $this->Cell(0, 15, 'Hasil Ujian', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Cell(0, 15, 'Institut Pemerintahan Dalam Negeri', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        $this->Image($image_file, 180, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->SetY(20);
+        $this->Cell(0, 15, 'Kampus Papua', 0, false, 'C', 0, '', 0, false, 'M', 'M');
     }
 
     public function Footer() {
