@@ -246,7 +246,7 @@ class Tugas extends CI_Controller {
 		$this->output_json($list, false);
 	}
 	
-	public function list()
+	public function list_tugas()
 	{
 		$this->akses_mahasiswa();
 

@@ -61,7 +61,7 @@ class Hasiltugas extends CI_Controller {
 		];
 		if ($import_data != null) $data['import'] = $import_data;
 
-		print_r($data['import']);
+		// print_r($data['import']);
 
 		$this->load->view('_templates/dashboard/_header', $data);
 		$this->load->view('tugas/import');

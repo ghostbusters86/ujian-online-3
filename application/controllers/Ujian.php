@@ -208,7 +208,7 @@ class Ujian extends CI_Controller {
 		$this->output_json($list, false);
 	}
 	
-	public function list()
+	public function list_ujian()
 	{
 		$this->akses_mahasiswa();
 
