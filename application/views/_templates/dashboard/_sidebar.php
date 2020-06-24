@@ -110,14 +110,14 @@
 			<?php endif; ?>
 			<?php if( $this->ion_auth->in_group('mahasiswa') ) : ?>
 			<li class="<?=$page==='ujian'?"active":""?>">
-				<a href="<?=base_url('ujian/list')?>" rel="noopener noreferrer">
+				<a href="<?=base_url('ujian/list_ujian')?>" rel="noopener noreferrer">
 					<i class="fa fa-chrome"></i> <span>Ujian</span>
 				</a>
 			</li>
 			<?php endif; ?>
 			<?php if( $this->ion_auth->in_group('mahasiswa') ) : ?>
 			<li class="<?=$page==='tugas'?"active":""?>">
-				<a href="<?=base_url('tugas/list')?>" rel="noopener noreferrer">
+				<a href="<?=base_url('tugas/list_tugas')?>" rel="noopener noreferrer">
 					<i class="fa fa-gift"></i> <span>Tugas</span>
 				</a>
 			</li>
