@@ -60,7 +60,7 @@
 					<li class="<?=$page==='mahasiswa'?"active":""?>">
 						<a href="<?=base_url('mahasiswa')?>">
 							<i class="fa fa-circle-o"></i>
-							Master Mahasiswa
+							Master Praja
 						</a>
 					</li>
 				</ul>
