@@ -311,7 +311,7 @@ class Tugas extends CI_Controller {
 
 		$config['upload_path'] = FCPATH.'uploads/tugasMahasiswa/';
 		$config['encrypt_name'] = TRUE;
-		$config['allowed_types'] = 'doc|docx|ppt|pptx|xls|xlsx|pdf';
+		$config['allowed_types'] = 'pdf';
 		$config['max_size'] = 2000;
 		$this->load->library('upload', $config);
 
@@ -320,13 +320,13 @@ class Tugas extends CI_Controller {
 
 		if($method == 'add'){
 			if (!$this->upload->do_upload('file_tugas')) {
-				$data = array('pesan' => $this->upload->display_errors());
+				$data =  $this->upload->display_errors();
 			} else {
 				$tanggal = date("Y-m-d H:i:s");
 				$new_name = $this->upload->data('file_name');
 				$ext = $this->upload->data('file_ext');
 				$this->tugas->add_tugas($id_tugas, $nim, $new_name, $tanggal, $ext);
-				$data = array('pesan' => 'upload berhasil');
+				$data =  'upload berhasil';
 			}
 
 		}else{
@@ -334,14 +334,14 @@ class Tugas extends CI_Controller {
 			$rowdata = $this->tugas->rowdata($id_hasil_tugas)->row();
 			$fileLama = $rowdata->tugas_mahasiswa;
 			if (!$this->upload->do_upload('file_tugas')) {
-				$data = array('pesan' => $this->upload->display_errors());
+				$data =  $this->upload->display_errors();
 			} else {
 				$tanggal = date("Y-m-d H:i:s");
 				$new_name = $this->upload->data('file_name');
 				$ext = $this->upload->data('file_ext');
 				$this->tugas->update_tugas($id_hasil_tugas, $new_name, $tanggal, $ext);
 				unlink($file.$fileLama);
-				$data = array('pesan' => 'upload berhasil');
+				$data =  'upload berhasil';
 			}
 		}
 		echo json_encode($data);

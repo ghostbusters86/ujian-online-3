@@ -33,11 +33,13 @@ $(document).ready(function () {
             { "data": 'nama_dosen' },
             
             { "data": 'tanggal_mulai' },
+            
             { "data": 'terlambat',
                 render: function ( data, type, row ) {
                 return data;
                 } 
             },
+            { "data": 'nilai' },
             { 
                 // "data": 'ada',
                 "searchable": false,
@@ -51,13 +53,13 @@ $(document).ready(function () {
             }
         ],
         columnDefs: [
-            { "visible": false, "targets": 7 },
+            { "visible": false, "targets": 8 },
             // {
             //     "targets": 5,
             //     "render": $.fn.dataTable.render.moment( 'Do MMM YYYY' )
             //   },
             {
-                "targets": 6,
+                "targets": 7,
                 "data": 'ada',
                 "render": function (data, type, row, meta) {
                     var btn;

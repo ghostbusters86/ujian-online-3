@@ -49,6 +49,7 @@
 						<th>Dosen</th>
                         <th>Mulai</th>
                         <th>Selesai</th>
+                        <th>Nilai</th>
                         <th>Tugas</th>
                         <th>Ada</th>
                         <th class="text-center">Aksi</th>
@@ -62,6 +63,7 @@
 						<th>Dosen</th>
                         <th>Mulai</th>
                         <th>Selesai</th>
+                        <th>Nilai</th>
                         <th>Tugas</th>
                         <th>Ada</th>
                         <th class="text-center">Aksi</th>
@@ -234,10 +236,26 @@
                 cache:false,
                 async:false,
                 success: function(data){
-                    alert(data);
-                    document.getElementById("formUpload").reset();
-                    $('#uploadTugas').modal('hide');
-                    reload_ajax();
+                    if(data == '"upload berhasil"'){
+                        title = 'Sukses' 
+                        text  = "Data Berhasil disimpan"
+                        type  = "success"
+                    }else{
+                        title = 'Gagal' 
+                        text  = data
+                        type  = "warning"
+                    }
+                    Swal({
+                        "title": title,
+                        "text": text,
+                        "type": type
+                    }).then((result) => {
+                        document.getElementById("formUpload").reset();
+                        $('#uploadTugas').modal('hide');
+                        reload_ajax();
+                    });
+
+                    
                 }
             });
     });

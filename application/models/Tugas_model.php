@@ -11,12 +11,15 @@ class Tugas_model extends CI_Model{
         if($id!==null){
             $this->datatables->where('dosen_id', $id);
         }
+        $this->datatables->add_column('download', '<a href="'.base_url().'tugas/downloadTugas/$1">$1</a>','file_tugas');
         return $this->datatables->generate();
     }
 
     public function getListTugas($id, $kelas)
     {
-        $this->datatables->select("a.id_tugas, e.nama_dosen, d.nama_kelas, a.nama_tugas,  b.nama_matkul, (SELECT COUNT(id) FROM h_tugas h WHERE h.id_mahasiswa = {$id} AND h.id_tugas = a.id_tugas) AS ada, date_format(a.tanggal_mulai,'%m-%d-%Y %H:%i') as tanggal_mulai, date_format(a.terlambat,'%m-%d-%Y %H:%i') as terlambat");
+        $this->datatables->select("a.id_tugas, e.nama_dosen, d.nama_kelas, a.nama_tugas,  b.nama_matkul, (SELECT COUNT(id) FROM h_tugas h WHERE h.id_mahasiswa = {$id} AND h.id_tugas = a.id_tugas) AS ada, 
+        (SELECT nilai FROM h_tugas h WHERE h.id_mahasiswa = {$id} AND h.id_tugas = a.id_tugas) AS nilai, 
+        date_format(a.tanggal_mulai,'%m-%d-%Y %H:%i') as tanggal_mulai, date_format(a.terlambat,'%m-%d-%Y %H:%i') as terlambat");
         $this->datatables->from('m_tugas a');
         $this->datatables->join('matkul b', 'a.matkul_id = b.id_matkul');
         $this->datatables->join('kelas_dosen c', "a.dosen_id = c.dosen_id");
@@ -119,5 +122,9 @@ class Tugas_model extends CI_Model{
         $this->db->set('tugas_mahasiswa', $tugas);
         $this->db->where('id', $id);
         $this->db->update('h_tugas');
+    }
+
+    function update_nilai($data){
+        $this->db->update_batch('h_tugas', $data, 'id');
     }
 }

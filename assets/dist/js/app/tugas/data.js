@@ -39,7 +39,7 @@ $(document).ready(function () {
                 "orderable": false
             },
             {
-                "data": 'file_tugas',
+                "data": 'download',
                 "orderable": false
             },
             { "data": 'nama_matkul' },

@@ -27,6 +27,11 @@
                     <small class="help-block"></small>
                 </div>
                 <div class="form-group">
+                    <label for="deskripsi">Deskripsi Tugas</label>
+                    <textarea name="deskripsi" class="form-control" rows="4" cols="50" placeholder="Deskripsi Tugas"><?=$tugas->deskripsi_tugas?></textarea>
+                    <small class="help-block"></small>
+                </div>
+                <div class="form-group">
                     <label for="tugas">File Tugas</label>
                     <input type="file" name="file_tugas" class="form-control">
                     <small class="help-block"></small>

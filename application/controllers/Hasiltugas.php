@@ -68,37 +68,39 @@ class Hasiltugas extends CI_Controller {
 		$this->load->view('_templates/dashboard/_footer');
 	}
 
-	 function preview($id, $ext){
-		$file = FCPATH.'uploads/tugasMahasiswa/';
-		$ext = $ext;
+	 function preview($id){
+        $data = [
+			'user' 		=> $this->user,
+			'judul'		=> 'Tugas',
+			'subjudul'	=> 'Preview Tugas',
+			'id'		=> $id
+		];
 
-			switch ($ext) {
-				case '.xlsx':
-					$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-					break;
-				case '.xls':
-					$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
-					break;
-				case '.csv':
-					$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-					break;
-				default:
-					echo "unknown file ext";
-					die;
-			}
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('tugas/preview');
+		$this->load->view('_templates/dashboard/_footer.php');
+	 }
 
-			$spreadsheet = $reader->load($file.$id);
-			$sheetData = $spreadsheet->getActiveSheet()->toArray();
-			$jurusan = [];
-			for ($i = 1; $i < count($sheetData); $i++) {
-				if ($sheetData[$i][0] != null) {
-					$jurusan[] = $sheetData[$i][0];
-				}
-			}
+	 function hasil_nilai(){
+		 $id = $this->input->post('id');
+		 $nilai = $this->input->post('nilai');
 
-			// unlink($file);
+		 $data = array();
 
-			$this->import($jurusan);
+		 $index = 0;
+		 if(is_array($id) || is_object($id)){
+			 foreach ($id as $dataid) {
+				 # code...
+				 array_push($data, array(
+					'id'=>$dataid,
+					'nilai' =>$nilai[$index]
+				 ));
+				 $index++;
+			 }
+		 }
+
+		 $query = $this->tugas->update_nilai($data);
+		 echo json_encode('data terupdate');
 	 }
 
     

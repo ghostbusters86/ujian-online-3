@@ -59,6 +59,7 @@
                        
                    </div>
                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="SimpanData">Simpan</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                    </div>
                     </div>
@@ -86,6 +87,7 @@
                     tabel += '<th>Nama</th>'
                     tabel += '<th>File Tugas</th>'
                     tabel += '<th>Tanggal Mengumpulkan</th>'
+                    tabel += '<th>Nilai</th>'
                     tabel += '<th>Aksi</th>'
                     tabel += '</tr>'
                         if(data.length > 0){
@@ -94,11 +96,13 @@
                                 tabel += '<tr>'
                                 tabel += '<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">'
                                 tabel += '<th><input type="checkbox" class="check-item" id="tugas_'+i+'"  name="tugas" value="'+data[i].tugas_mahasiswa+'"></th>'
+                                tabel += '<input type="hidden" readonly class="form-control" id="id_'+i+'"  name="id[]" value="'+data[i].id+'">'
                                 tabel += '<th>'+data[i].nim+'</th>'
                                 tabel += '<th>'+data[i].nama+'</th>'
                                 tabel += '<th>'+data[i].tugas_mahasiswa+'</th>'
                                 tabel += '<th>'+data[i].waktu+'</th>'
-                                tabel += '<th><a href="'+base_url+'hasiltugas/preview/'+data[i].tugas_mahasiswa+'/'+data[i].ext+'" class="btn btn-xs bg-maroon" target:_blank > Preview </a></th>'
+                                tabel += '<th><input type="text" class="form-control" id="nilai_'+i+'"  name="nilai[]" value="'+data[i].nilai+'"></th>'
+                                tabel += '<th><a href="'+base_url+'hasiltugas/preview/'+data[i].tugas_mahasiswa+'" class="btn btn-xs bg-maroon" target:"_blank" > Preview </a></th>'
                                 tabel += '</tr>'
                             no++;
                             }
@@ -142,6 +146,30 @@
             
         });
     // });
+
+
+    $(document).on("click", "#SimpanData", function (e) {
+        e.preventDefault(); 
+            $.ajax({
+                url:'<?php echo base_url();?>hasiltugas/hasil_nilai',
+                type:"post",
+                data:new FormData(document.getElementById("form-download")),
+                processData:false,
+                contentType:false,
+                cache:false,
+                async:false,
+                success: function(data){
+                    Swal({
+                        "title": "Sukses",
+                        "text": "Data Berhasil disimpan",
+                        "type": "success"
+                    }).then((result) => {
+
+                    });
+                // }
+                }
+            });
+    });
 
 
 </script>
