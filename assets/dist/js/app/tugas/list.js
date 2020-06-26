@@ -103,23 +103,22 @@ $(document).ready(function () {
             var tanggalsekarang = new Intl.DateTimeFormat('en-US', options).format(date);
             // console.log(tanggalsekarang)
 
-            var patokan = new Date(data.terlambat);
-            // sometimes even the US needs 24-hour time
-            options = {
-            year: 'numeric', month: 'numeric', day: 'numeric',
-            hour: 'numeric', minute: 'numeric', second: 'numeric',
-            hour12: false,
-            timeZone: 'Asia/Jakarta' 
-            };
-            var tanggalpatokan = new Intl.DateTimeFormat('en-US', options).format(patokan);
-            // console.log(tanggalpatokan)
-
+            var data_terlambat = data.terlambat;
+            var p_lambat = data_terlambat.split(' ');
+            var date_ = p_lambat[0];
+            var time_ = p_lambat[1];
+            var p_lambat = date_.split('-');
+            var batas_lambat = (p_lambat[2])+'-'+(p_lambat[0])+'-'+(p_lambat[1])+'T'+time_+':00';
+            var dcontoh = '2020-06-30T11:51:00';
+            var date_late = new Date(batas_lambat);
+            var tanggalpatokan = new Intl.DateTimeFormat('en-US', options).format(date_late);
             
+
             if ( tanggalpatokan < tanggalsekarang && data.ada == '0') {
-                // $('td', row).css('background-color', '#b50000');
                 $('td', row).css('color', 'red');
-                // $('td', row).css('font-weight', 'bold');
-              }
+            }
+            
+            
         }
     });
 });
