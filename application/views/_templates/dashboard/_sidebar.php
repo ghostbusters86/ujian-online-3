@@ -128,6 +128,13 @@
 			</li>
 			<?php endif; ?>
 			<?php if( $this->ion_auth->in_group('mahasiswa') ) : ?>
+			<li class="<?=$page==='ujian_essay'?"active":""?>">
+				<a href="<?=base_url('ujian_essay/list_ujian')?>" rel="noopener noreferrer">
+					<i class="fa fa-chrome"></i> <span>Ujian Essay</span>
+				</a>
+			</li>
+			<?php endif; ?>
+			<?php if( $this->ion_auth->in_group('mahasiswa') ) : ?>
 			<li class="<?=$page==='tugas'?"active":""?>">
 				<a href="<?=base_url('tugas/list_tugas')?>" rel="noopener noreferrer">
 					<i class="fa fa-gift"></i> <span>Tugas</span>
