@@ -304,7 +304,7 @@ class Tugas extends CI_Controller {
 	}
 
 	public function do_upload_mahasiswa(){
-		date_default_timezone_set("Asia/Bangkok");
+		date_default_timezone_set("Asia/Jakarta");
 		$method = $this->input->post('method');
 		$id_tugas = $this->input->post('id_tugas');
 		$nim = $this->input->post('nim');

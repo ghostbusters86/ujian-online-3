@@ -93,11 +93,23 @@
 					<i class="fa fa-file-text-o"></i> <span>Bank Soal</span>
 				</a>
 			</li>
+			<li class="<?=$page==='soal_essay'?"active":""?>">
+				<a href="<?=base_url('soal_essay')?>" rel="noopener noreferrer">
+					<i class="fa fa-file-text-o"></i> <span>Bank Soal Essay</span>
+				</a>
+			</li>
 			<?php endif; ?>
 			<?php if( $this->ion_auth->in_group('dosen') ) : ?>
 			<li class="<?=$page==='ujian'?"active":""?>">
 				<a href="<?=base_url('ujian/master')?>" rel="noopener noreferrer">
 					<i class="fa fa-chrome"></i> <span>Ujian</span>
+				</a>
+			</li>
+			<?php endif; ?>
+			<?php if( $this->ion_auth->in_group('dosen') ) : ?>
+			<li class="<?=$page==='ujian_essay'?"active":""?>">
+				<a href="<?=base_url('ujian_essay/master')?>" rel="noopener noreferrer">
+					<i class="fa fa-chrome"></i> <span>Ujian Essay</span>
 				</a>
 			</li>
 			<?php endif; ?>
