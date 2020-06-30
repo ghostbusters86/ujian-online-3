@@ -102,12 +102,27 @@ class Ujian_essay_model extends CI_Model {
         return $this->db->get();
     }
 
+    public function detail_ujian($id)
+    {
+        $this->db->select('*');
+        $this->db->from('h_ujian_essay');
+        $this->db->where('id', $id);
+        return $this->db->get();
+    }
+
     public function ambilSoal($pc_urut_soal_arr)
     {
         $this->db->select("*");
         $this->db->from('tb_soal_essay');
         $this->db->where('id_soal_essay', $pc_urut_soal_arr);
         return $this->db->get()->row();
+    }
+
+    function update_jawaban($id_tes, $_tidsoal, $jawaban_){
+        $this->db->where('id', $id_tes);
+        $this->db->where('id_soal_essay', $_tidsoal);
+        $this->db->set('jawaban_essay', $jawaban_);
+        return $this->db->update('detail_h_ujian_essay');
     }
 
 

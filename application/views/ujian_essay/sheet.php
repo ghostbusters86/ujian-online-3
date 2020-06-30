@@ -51,4 +51,4 @@ if(time() >= $soal->waktu_habis)
     var total_widget    = widget.length;
 </script>
 
-<script src="<?=base_url()?>assets/dist/js/app/ujian/sheet.js"></script>
+<script src="<?=base_url()?>assets/dist/js/app/ujian_essay/sheet.js"></script>

@@ -159,18 +159,18 @@ function simpan_sementara() {
         var jawab = form[idx];
         var ragu = form[idx2];
 
-        if (jawab != undefined) {
+        if (jawab != "") {
             if (ragu == "Y") {
-                if (jawab == "-") {
-                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn btn-default btn_soal btn-sm" onclick="return buka(' + (i) + ');">' + (i) + ". " + jawab + "</a>";
+                if (jawab == "") {
+                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn btn-default btn_soal btn-sm" onclick="return buka(' + (i) + ');">' + (i) + ". OK</a>";
                 } else {
-                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn btn-warning btn_soal btn-sm" onclick="return buka(' + (i) + ');">' + (i) + ". " + jawab + "</a>";
+                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn btn-warning btn_soal btn-sm" onclick="return buka(' + (i) + ');">' + (i) + ". OK</a>";
                 }
             } else {
-                if (jawab == "-") {
-                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn btn-default btn_soal btn-sm" onclick="return buka(' + (i) + ');">' + (i) + ". " + jawab + "</a>";
+                if (jawab == "") {
+                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn btn-default btn_soal btn-sm" onclick="return buka(' + (i) + ');">' + (i) + ". OK</a>";
                 } else {
-                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn btn-success btn_soal btn-sm" onclick="return buka(' + (i) + ');">' + (i) + ". " + jawab + "</a>";
+                    hasil_jawaban += '<a id="btn_soal_' + (i) + '" class="btn btn-success btn_soal btn-sm" onclick="return buka(' + (i) + ');">' + (i) + ". OK</a>";
                 }
             }
         } else {
@@ -178,6 +178,7 @@ function simpan_sementara() {
         }
     }
     $("#tampil_jawaban").html('<div id="yes"></div>' + hasil_jawaban);
+    // console.log(jawab)
 }
 
 function simpan() {
@@ -186,7 +187,7 @@ function simpan() {
 
     $.ajax({
         type: "POST",
-        url: base_url + "ujian/simpan_satu",
+        url: base_url + "ujian_essay/simpan_satu",
         data: form.serialize(),
         dataType: 'json',
         success: function (data) {
@@ -210,7 +211,7 @@ function selesai() {
         success: function (r) {
             console.log(r);
             if (r.status) {
-                window.location.href = base_url + 'ujian/list_ujian';
+                window.location.href = base_url + 'ujian/list';
             }
         }
     });

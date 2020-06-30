@@ -288,29 +288,49 @@ class Ujian_essay extends CI_Controller {
 			}
 			$soal_urut_ok 	= $soal_urut_ok;
 			$list_id_soal	= "";
+			$list_jw_soal 	= "";
 			if (!empty($soal)) {
 				foreach ($soal as $d) {
 					$list_id_soal .= $d->id_soal_essay.",";
+					$list_jw_soal .= $d->id_soal_essay."::N,";
 				}
 			}
 			$list_id_soal 	= substr($list_id_soal, 0, -1);
+			$list_jw_soal 	= substr($list_jw_soal, 0, -1);
 			$waktu_selesai 	= date('Y-m-d H:i:s', strtotime("+{$ujian->waktu} minute"));
 			$time_mulai		= date('Y-m-d H:i:s');
+			$id_data = uniqid();
 
 			$input = [
+				'id'=> $id_data,
 				'id_ujian_essay'=> $id,
 				'id_mahasiswa'	=> $mhs->id_mahasiswa,
 				'list_soal'		=> $list_id_soal,
+				'list_jawaban'	=> $list_jw_soal,
 				'nilai'			=> 0,
 				'nilai_bobot'	=> 0,
 				'tgl_mulai'		=> $time_mulai,
 				'tgl_selesai'	=> $waktu_selesai,
 				'status'		=> 'Y'
 			];
+
 			$this->master->create('h_ujian_essay', $input);
 
-			// Setelah insert wajib refresh dulu
+			$dt = $this->ujian->detail_ujian($id_data)->row();
+			$str = $dt->list_soal;
+			$datahaha = explode(",",$str);
+			for ($i = 0; $i < sizeof($datahaha); $i++) {
+				$datakuhaha[$i] = [
+					'id'			=> $id_data,
+					'id_soal_essay'	=> $datahaha[$i],
+					'nilai'			=> 0
+				];
+				$this->master->create('detail_h_ujian_essay', $datakuhaha[$i]);
+			}
+
+			// // Setelah insert wajib refresh dulu
 			redirect('ujian_essay/?key='.urlencode($key), 'location', 301);
+			// print_r($a_soal);
 		}
 
 		
@@ -328,17 +348,29 @@ class Ujian_essay extends CI_Controller {
 		$detail_tes = $q_soal;
 		$soal_urut_ok = $soal_urut_ok;
 
+		$pc_list_jawaban = explode(",", $detail_tes->list_jawaban);
+		$arr_jawab = array();
+		foreach ($pc_list_jawaban as $v) {
+			$pc_v 	= explode(":", $v);
+			$idx 	= $pc_v[0];
+			$rg 	= $pc_v[1];
+
+			$arr_jawab[$idx] = array("r"=>$rg);
+		}
+
 		$html = '';
 		$no = 1;
 		if (!empty($soal_urut_ok)) {
 			foreach ($soal_urut_ok as $s) {
 				$path = 'uploads/bank_soal_essay/';
-				$html .= '<input type="hidden" name="id_soal_'.$no.'" value="'.$s->id_soal_essay.'">';
+				$vrg = $arr_jawab[$s->id_soal_essay]["r"] == "" ? "N" : $arr_jawab[$s->id_soal_essay]["r"];
+				$html .= '<input type="text" name="id_soal_'.$no.'" value="'.$s->id_soal_essay.'">';
+				$html .= '<input type="text" name="rg_'.$no.'" id="rg_'.$no.'" value="'.$vrg.'">';
 				$html .= '<div class="step" id="widget_'.$no.'">';
 
 				$html .= '<div class="text-center"><div class="w-25">'.tampil_media($path.$s->file).'</div></div>'.$s->soal_essay;
 				
-				$html .= '<div  onchange="return simpan_sementara();"><textarea class="form-control"> </textarea></div>';
+				$html .= '<div  onclick="return simpan_sementara();"><textarea class="form-control" id="opsi_'.$s->id_soal_essay.'" name="opsi_'.$no.'"> </textarea></div>';
 				// }
 				$html .= '</div></div>';
 				$no++;
@@ -361,6 +393,39 @@ class Ujian_essay extends CI_Controller {
 		$this->load->view('_templates/topnav/_header.php', $data);
 		$this->load->view('ujian_essay/sheet');
 		$this->load->view('_templates/topnav/_footer.php');
+	}
+
+	public function simpan_satu()
+	{
+		// Decrypt Id
+		$id_tes = $this->input->post('id', true);
+		$id_tes = $this->encryption->decrypt($id_tes);
+		
+		$input 	= $this->input->post(null, true);
+		$list_jawaban 	= "";
+		// $id_soal_essay = "";
+		$hasil = "";
+		for ($i = 1; $i < $input['jml_soal']; $i++) {
+			$_tjawab 	= "opsi_".$i;
+			$_tidsoal 	= "id_soal_".$i;
+			$_ragu 		= "rg_".$i;
+			$jawaban_ 	= empty($input[$_tjawab]) ? "" : $input[$_tjawab];
+			$list_jawaban	.= "".$input[$_tidsoal].":OK:".$input[$_ragu].",";
+			// $id_soal_essay .= $i;
+			$hasil .= $jawaban_;
+			$this->ujian->update_jawaban($id_tes, $input[$_tidsoal], $hasil);
+		}
+		$list_jawaban	= substr($list_jawaban, 0, -1);
+		// $jawaban_ = $jawaban_;
+		$d_simpan = [
+			'list_jawaban' => $list_jawaban
+		];
+
+		
+		
+		// Simpan jawaban
+		$this->master->update('h_ujian_essay', $d_simpan, 'id', $id_tes);
+		$this->output_json(['status'=>true]);
 	}
     
 }
