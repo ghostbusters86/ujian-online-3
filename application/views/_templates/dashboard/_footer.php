@@ -7,10 +7,10 @@
 		<footer class="main-footer">
 			<!-- To the right -->
 			<div class="pull-right hidden-xs">
-				Computer Based Test v.1.0
+				
 			</div>
 			<!-- Default to the left -->
-			<strong>Copyright &copy; 2020. REPARSMART </strong> All rights reserved
+			<strong>E-learning IPDN Kampus Papua &copy; REPARSMART by PRAJA GAUTAMA XXIX </strong>
 		</footer>
 
 	</div>
