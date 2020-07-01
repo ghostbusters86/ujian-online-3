@@ -514,7 +514,7 @@ class Ujian_essay extends CI_Controller {
 
 		}
 		
-		$sql = $this->nilai->save_batch($data);
+		$sql = $this->ujian->save_batch($data);
 	}
     
 }
