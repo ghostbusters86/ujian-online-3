@@ -148,6 +148,11 @@
 					<i class="fa fa-file"></i> <span>Hasil Ujian</span>
 				</a>
 			</li>
+			<li class="<?=$page==='hasil_ujian_essay'?"active":""?>">
+				<a href="<?=base_url('hasil_ujian_essay')?>" rel="noopener noreferrer">
+					<i class="fa fa-file"></i> <span>Hasil Ujian Essay</span>
+				</a>
+			</li>
 			<li class="<?=$page==='hasiltugas'?"active":""?>">
 				<a href="<?=base_url('hasiltugas')?>" rel="noopener noreferrer">
 					<i class="fa fa-file"></i> <span>Hasil Tugas</span>

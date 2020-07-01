@@ -56,7 +56,7 @@ $(document).ready(function () {
                     }
                     else if (data.ada > 0 && data.status_penilaian == 'N') {
                         btn = `
-								<a class="btn btn-xs btn-success" href="${base_url}hasilujianessay/cetak/${data.id_ujian_essay}" target="_blank">
+								<a class="btn btn-xs btn-success" href="${base_url}hasil_ujian_essay/cetak/${data.id_ujian_essay}" target="_blank">
 									<i class="fa fa-print"></i> Cetak Hasil 
 								</a>`;
                     }

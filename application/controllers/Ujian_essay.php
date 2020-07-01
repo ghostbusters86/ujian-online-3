@@ -497,15 +497,17 @@ class Ujian_essay extends CI_Controller {
 	function save_hasil_jawaban(){
 		$id = $_POST['id_detail'];
 		$nilai = $_POST['nilai'];
+		$id_hasil = $_POST['id'];
+		$bobot = $_POST['bobot'];
 
 		$data = array();
 		
 		$index = 0; 
 		if(is_array($id) || is_object($id))
 		{
-			foreach($Article as $dataArticle){ 
+			foreach($id as $dataId){ 
 			array_push($data, array(
-				'id_detail'=>$id,
+				'id_detail'=>$dataId,
 				'nilai'=>$nilai[$index],  
 			));
 			
@@ -514,7 +516,22 @@ class Ujian_essay extends CI_Controller {
 
 		}
 		
-		$sql = $this->ujian->save_batch($data);
+		$sql = $this->ujian->update_batch($data);
+
+		$total_bobot = 0;
+		$n = 0;
+		$total_nilai = 0;
+		foreach ($bobot as $totalbot) {
+			$total_bobot = $total_bobot + $totalbot;
+			$total_nilai = $total_nilai+($totalbot*$nilai[$n]);
+			$n++;
+		}
+		
+		$final_nilai = $total_nilai/$total_bobot;
+		
+		$this->ujian->update_final($id_hasil, number_format($final_nilai,2), $total_bobot);
+		echo "<script>alert('Suksen Menyimpan Data');</script>";
+		redirect('ujian_essay/hasil_jawaban/'.$id_hasil);
 	}
     
 }

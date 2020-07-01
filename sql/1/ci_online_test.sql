@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 01 Jul 2020 pada 01.34
+-- Waktu pembuatan: 01 Jul 2020 pada 16.53
 -- Versi server: 10.1.37-MariaDB
 -- Versi PHP: 7.0.33
 
@@ -42,8 +42,12 @@ CREATE TABLE `detail_h_ujian_essay` (
 --
 
 INSERT INTO `detail_h_ujian_essay` (`id_detail`, `id`, `id_soal_essay`, `jawaban_essay`, `nilai`, `status`) VALUES
-(67, '5efbc5c66359b', 2, ' asfsfsafas', '0', ''),
-(68, '5efbc5c66359b', 1, ' asfsfsafas vdvdvd', '0', '');
+(69, '5efc7cd2bdca4', 1, 'ini jawaban pertama', '70', ''),
+(70, '5efc7cd2bdca4', 2, 'ini Jawaban kedua', '100', ''),
+(71, '5efc9d080a486', 1, 'haha', '60', ''),
+(72, '5efc9d080a486', 2, 'wkwkwkw', '80', ''),
+(73, '5efc9d6ec5c42', 1, 'cascasc', '90', ''),
+(74, '5efc9d6ec5c42', 2, 'cascasca', '60', '');
 
 -- --------------------------------------------------------
 
@@ -187,7 +191,9 @@ CREATE TABLE `h_ujian_essay` (
 --
 
 INSERT INTO `h_ujian_essay` (`id`, `id_ujian_essay`, `id_mahasiswa`, `list_soal`, `list_jawaban`, `nilai`, `nilai_bobot`, `tgl_mulai`, `tgl_selesai`, `status`, `status_penilaian`) VALUES
-('5efbc5c66359b', 4, 1, '2,1', '2:OK:N,1:OK:N', '0', '0', '2020-07-01 06:07:50', '2020-07-01 06:37:50', 'Y', 'Y');
+('5efc7cd2bdca4', 4, 1, '1|2', '1:ini jawaban pertama:N|2:ini Jawaban kedua:N', '95', '6', '2020-07-01 19:08:50', '2020-07-01 19:38:50', 'N', 'N'),
+('5efc9d080a486', 5, 1, '1|2', '1:haha:N|2:wkwkwkw:N', '77', '6', '2020-07-01 21:26:16', '2020-07-01 21:36:16', 'N', 'N'),
+('5efc9d6ec5c42', 5, 3, '1|2', '1:cascasc:N|2:cascasca:N', '65', '6', '2020-07-01 21:27:58', '2020-07-01 21:37:58', 'N', 'N');
 
 -- --------------------------------------------------------
 
@@ -430,7 +436,8 @@ CREATE TABLE `m_ujian_essay` (
 --
 
 INSERT INTO `m_ujian_essay` (`id_ujian_essay`, `id_dosen`, `id_matkul`, `nama_ujian_essay`, `jumlah_soal`, `waktu`, `jenis`, `tanggal_mulai`, `tanggal_selesai`, `token`) VALUES
-(4, 1, 1, 'dasfsad', 2, 30, 'acak', '2020-06-29 19:41:06', '2020-07-02 19:41:07', 'PPPPP');
+(4, 1, 1, 'dasfsad', 2, 30, 'acak', '2020-06-29 19:41:06', '2020-07-02 19:41:07', 'PPPPP'),
+(5, 1, 1, 'ujian kedua', 2, 10, 'acak', '2020-07-01 21:25:08', '2020-07-02 21:25:10', 'GNANE');
 
 -- --------------------------------------------------------
 
@@ -497,7 +504,7 @@ CREATE TABLE `tb_soal_essay` (
 
 INSERT INTO `tb_soal_essay` (`id_soal_essay`, `id_dosen`, `id_matkul`, `bobot`, `file`, `tipe_file`, `soal_essay`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 1, '5b96e18c4679a6a1c1434203d7f0cf88.png', 'image/png', '<p>ini testdata</p>', '2020-06-27 22:23:12', '2020-06-27 22:23:12'),
-(2, 1, 1, 2, 'c00247bccf6aab787c9322b438fa3a32.png', 'image/png', '<p>ini soal keduaaaadd</p>', '2020-06-27 22:26:47', '2020-06-28 19:54:46');
+(2, 1, 1, 5, 'c00247bccf6aab787c9322b438fa3a32.png', 'image/png', '<p>ini soal keduaaaadd</p>', '2020-06-27 22:26:47', '2020-06-28 19:54:46');
 
 -- --------------------------------------------------------
 
@@ -533,11 +540,11 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
 (1, '127.0.0.1', 'Administrator', '$2y$12$tGY.AtcyXrh7WmccdbT1rOuKEcTsKH6sIUmDr0ore1yN4LnKTTtuu', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1593348996, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
-(3, '::1', '12183018', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'mahasiswa@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550225511, 1593555054, 1, 'Muhammad', 'Arfananda', NULL, NULL),
-(4, '::1', '12345678', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'dosen@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550226286, 1593434454, 1, 'Koro', 'Sensei', NULL, NULL),
+(3, '::1', '12183018', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'mahasiswa@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550225511, 1593613762, 1, 'Muhammad', 'Arfananda', NULL, NULL),
+(4, '::1', '12345678', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'dosen@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550226286, 1593613797, 1, 'Koro', 'Sensei', NULL, NULL),
 (8, '::1', '01234567', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'dosen2@gmail.com', NULL, NULL, NULL, NULL, NULL, '37a14617afdd7655e0899c840e6ebd642153de45', '$2y$10$1wo2JZVFsWwtDzeHDQzYZOiDKkalhwQG7xWsLQTfQy5HRP1j4L24q', 1550289356, 1592755449, 1, 'Tobirama', 'Sensei', NULL, NULL),
 (9, '::1', '20000000', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'telo@gmail.com', NULL, NULL, NULL, NULL, NULL, 'b6506e1ea4dff1530c7b893eaffe8c287ec92503', '$2y$10$xVQ0eB6DKNjZ0BNODi9wjO0.3GTy9jIVrxII/YANqfwoUyn75rq62', 1550289356, 1592832398, 1, 'Telo', 'Goreng', NULL, NULL),
-(10, '::1', '30000000', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'ayam@gmail.com', NULL, NULL, NULL, NULL, NULL, 'fc5ccc2adbdeb25f30f6fb7ee46c07ffea36f45c', '$2y$10$UPsdhtSo9poOiFGdwHng/..gVDtqGMU4w/usuUF9NkDQ9AgdCk7dO', 1550289356, 1592831232, 1, 'Ayam', 'Bakar', NULL, NULL);
+(10, '::1', '30000000', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'ayam@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550289356, 1593613666, 1, 'Ayam', 'Bakar', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -719,7 +726,7 @@ ALTER TABLE `users_groups`
 -- AUTO_INCREMENT untuk tabel `detail_h_ujian_essay`
 --
 ALTER TABLE `detail_h_ujian_essay`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT untuk tabel `dosen`
@@ -803,7 +810,7 @@ ALTER TABLE `m_ujian`
 -- AUTO_INCREMENT untuk tabel `m_ujian_essay`
 --
 ALTER TABLE `m_ujian_essay`
-  MODIFY `id_ujian_essay` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_ujian_essay` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_soal`

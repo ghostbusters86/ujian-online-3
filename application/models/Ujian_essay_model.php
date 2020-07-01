@@ -89,7 +89,7 @@ class Ujian_essay_model extends CI_Model {
         $this->$db->join('kelas b', 'a.kelas_id=b.id_kelas');
         $this->$db->join('jurusan c', 'b.jurusan_id=c.id_jurusan');
         $this->$db->join('h_ujian_essay d', 'a.id_mahasiswa=d.id_mahasiswa');
-        $this->$db->where(['d.id_ujian' => $id]);
+        $this->$db->where(['d.id_ujian_essay' => $id]);
         return $this->$db->$get();
     }
 
@@ -151,7 +151,7 @@ class Ujian_essay_model extends CI_Model {
     }
 
     function ambil_nama_ujian($id){
-        $this->db->select('b.nama_ujian_essay');
+        $this->db->select('b.nama_ujian_essay, b.id_ujian_essay');
         $this->db->from('h_ujian_essay a');
         $this->db->join('m_ujian_essay b', 'a.id_ujian_essay = b.id_ujian_essay');
         $this->db->where('a.id', $id);
@@ -159,12 +159,48 @@ class Ujian_essay_model extends CI_Model {
     }
 
     function hasil_jawaban($id){
-        $this->db->select('a.id_detail, a.id, a.id_soal_essay, a.jawaban_essay, a.nilai, b.file, b.soal_essay');
+        $this->db->select('a.id_detail, b.bobot, a.id, a.id_soal_essay, a.jawaban_essay, a.nilai, b.file, b.soal_essay');
         $this->db->from('detail_h_ujian_essay a');
         $this->db->join('tb_soal_essay b', 'a.id_soal_essay = b.id_soal_essay');
         $this->db->where('a.id', $id);
         $this->db->order_by('a.id_detail', 'asc');
         return $this->db->get();
+    }
+
+    function update_batch($data){
+        return $this->db->update_batch('detail_h_ujian_essay', $data, 'id_detail');
+    }
+
+    function update_final($id, $nilai, $nilai_bobot){
+        $this->db->where('id', $id);
+        $this->db->set('nilai', $nilai);
+        $this->db->set('nilai_bobot', $nilai_bobot);
+        $this->db->set('status_penilaian', 'N');
+        return $this->db->update('h_ujian_essay');
+    }
+
+    public function getHasilUjian($nip = null)
+    {
+        $this->datatables->select('b.id_ujian_essay, b.nama_ujian_essay, b.jumlah_soal, CONCAT(b.waktu, " Menit") as waktu, b.tanggal_mulai');
+        $this->datatables->select('c.nama_matkul, d.nama_dosen');
+        $this->datatables->from('m_ujian_essay b');
+        $this->datatables->join('h_ujian_essay a', 'a.id_ujian_essay = b.id_ujian_essay' , 'left');
+        $this->datatables->join('matkul c', 'b.id_matkul = c.id_matkul');
+        $this->datatables->join('dosen d', 'b.id_dosen = d.id_dosen');
+        $this->datatables->group_by('b.id_ujian_essay');
+        if($nip !== null){
+            $this->datatables->where('d.nip', $nip);
+        }
+        return $this->datatables->generate();
+    }
+
+    public function bandingNilai($id)
+    {
+        $this->db->select_min('nilai', 'min_nilai');
+        $this->db->select_max('nilai', 'max_nilai');
+        $this->db->select_avg('FORMAT(FLOOR(nilai),0)', 'avg_nilai');
+        $this->db->where('id_ujian_essay', $id);
+        return $this->db->get('h_ujian_essay')->row();
     }
 
 
