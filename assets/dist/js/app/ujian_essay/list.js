@@ -43,16 +43,24 @@ $(document).ready(function () {
                 "targets": 6,
                 "data": {
                     "id_ujian_essay": "id_ujian_essay",
-                    "ada": "ada"
+                    "ada": "ada",
+                    "status_penilaian" : "status_penilaian"
                 },
                 "render": function (data, type, row, meta) {
                     var btn;
-                    if (data.ada > 0) {
+                    if (data.ada > 0 && data.status_penilaian == 'Y') {
+                        btn = `
+								<a class="btn btn-xs btn-warning" >
+									<i class="fa fa-info"></i> Proses Penilaian 
+								</a>`;
+                    }
+                    else if (data.ada > 0 && data.status_penilaian == 'N') {
                         btn = `
 								<a class="btn btn-xs btn-success" href="${base_url}hasilujianessay/cetak/${data.id_ujian_essay}" target="_blank">
-									<i class="fa fa-print"></i> Cetak Hasil
+									<i class="fa fa-print"></i> Cetak Hasil 
 								</a>`;
-                    } else {
+                    }
+                     else {
                         btn = `<a class="btn btn-xs btn-primary" href="${base_url}ujian_essay/token/${data.id_ujian_essay}">
 								<i class="fa fa-pencil"></i> Ikut Ujian
 							</a>`;

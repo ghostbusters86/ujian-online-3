@@ -202,7 +202,7 @@ function selesai() {
     ajaxcsrf();
     $.ajax({
         type: "POST",
-        url: base_url + "ujian/simpan_akhir",
+        url: base_url + "ujian_essay/simpan_akhir",
         data: { id: id_tes },
         beforeSend: function () {
             simpan();
@@ -211,7 +211,7 @@ function selesai() {
         success: function (r) {
             console.log(r);
             if (r.status) {
-                window.location.href = base_url + 'ujian/list';
+                window.location.href = base_url + 'ujian_essay/list_ujian';
             }
         }
     });

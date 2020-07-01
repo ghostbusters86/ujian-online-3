@@ -15,7 +15,7 @@
 		</div>
 		<div class="navbar-custom-menu">
 			<ul class="nav navbar-nav">
-				<li><a href="#" onclick="simpan_akhir()">Selesai Ujian</a></li>
+				<li><a href="#" onclick="return simpan_akhir()">Selesai Ujian</a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 						<?=$user->username?> <span class="caret"></span>

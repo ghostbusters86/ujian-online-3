@@ -72,6 +72,9 @@ $(document).ready(function () {
 									</button>
 									<a href="${base_url}ujian_essay/edit/${data}" class="btn btn-xs btn-warning">
 										<i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="${base_url}ujian_essay/nilai/${data}" class="btn btn-xs bg-maroon">
+										<i class="fa fa-search"></i>
 									</a>
 								</div>`;
                 }

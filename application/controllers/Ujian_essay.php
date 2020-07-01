@@ -291,8 +291,8 @@ class Ujian_essay extends CI_Controller {
 			$list_jw_soal 	= "";
 			if (!empty($soal)) {
 				foreach ($soal as $d) {
-					$list_id_soal .= $d->id_soal_essay.",";
-					$list_jw_soal .= $d->id_soal_essay."::N,";
+					$list_id_soal .= $d->id_soal_essay."|";
+					$list_jw_soal .= $d->id_soal_essay."::N|";
 				}
 			}
 			$list_id_soal 	= substr($list_id_soal, 0, -1);
@@ -318,7 +318,7 @@ class Ujian_essay extends CI_Controller {
 
 			$dt = $this->ujian->detail_ujian($id_data)->row();
 			$str = $dt->list_soal;
-			$datahaha = explode(",",$str);
+			$datahaha = explode("|",$str);
 			for ($i = 0; $i < sizeof($datahaha); $i++) {
 				$datakuhaha[$i] = [
 					'id'			=> $id_data,
@@ -337,7 +337,7 @@ class Ujian_essay extends CI_Controller {
 		$q_soal = $h_ujian->row();
 		// print_r($q_soal);
 		
-		$urut_soal 		= explode(",", $q_soal->list_soal);
+		$urut_soal 		= explode("|", $q_soal->list_soal);
 		$soal_urut_ok	= array();
 		for ($i = 0; $i < sizeof($urut_soal); $i++) {
 			$pc_urut_soal	= explode(":",$urut_soal[$i]);
@@ -348,14 +348,15 @@ class Ujian_essay extends CI_Controller {
 		$detail_tes = $q_soal;
 		$soal_urut_ok = $soal_urut_ok;
 
-		$pc_list_jawaban = explode(",", $detail_tes->list_jawaban);
+		$pc_list_jawaban = explode("|", $detail_tes->list_jawaban);
 		$arr_jawab = array();
 		foreach ($pc_list_jawaban as $v) {
 			$pc_v 	= explode(":", $v);
 			$idx 	= $pc_v[0];
-			$rg 	= $pc_v[1];
+			$val 	= $pc_v[1];
+			$rg 	= $pc_v[2];
 
-			$arr_jawab[$idx] = array("r"=>$rg);
+			$arr_jawab[$idx] = array("j"=>$val,"r"=>$rg);
 		}
 
 		$html = '';
@@ -364,13 +365,13 @@ class Ujian_essay extends CI_Controller {
 			foreach ($soal_urut_ok as $s) {
 				$path = 'uploads/bank_soal_essay/';
 				$vrg = $arr_jawab[$s->id_soal_essay]["r"] == "" ? "N" : $arr_jawab[$s->id_soal_essay]["r"];
-				$html .= '<input type="text" name="id_soal_'.$no.'" value="'.$s->id_soal_essay.'">';
-				$html .= '<input type="text" name="rg_'.$no.'" id="rg_'.$no.'" value="'.$vrg.'">';
+				$html .= '<input type="hidden" name="id_soal_'.$no.'" value="'.$s->id_soal_essay.'">';
+				$html .= '<input type="hidden" name="rg_'.$no.'" id="rg_'.$no.'" value="'.$vrg.'">';
 				$html .= '<div class="step" id="widget_'.$no.'">';
 
 				$html .= '<div class="text-center"><div class="w-25">'.tampil_media($path.$s->file).'</div></div>'.$s->soal_essay;
 				
-				$html .= '<div  onclick="return simpan_sementara();"><textarea class="form-control" id="opsi_'.$s->id_soal_essay.'" name="opsi_'.$no.'"> </textarea></div>';
+				$html .= '<div  onclick="return simpan_sementara();"><textarea class="form-control" id="opsi_'.$s->id_soal_essay.'" name="opsi_'.$no.'">'.$arr_jawab[$s->id_soal_essay]["j"].'</textarea></div>';
 				// }
 				$html .= '</div></div>';
 				$no++;
@@ -410,9 +411,9 @@ class Ujian_essay extends CI_Controller {
 			$_tidsoal 	= "id_soal_".$i;
 			$_ragu 		= "rg_".$i;
 			$jawaban_ 	= empty($input[$_tjawab]) ? "" : $input[$_tjawab];
-			$list_jawaban	.= "".$input[$_tidsoal].":OK:".$input[$_ragu].",";
+			$list_jawaban	.= "".$input[$_tidsoal].":".$jawaban_.":".$input[$_ragu]."|";
 			// $id_soal_essay .= $i;
-			$hasil .= $jawaban_;
+			$hasil = $jawaban_;
 			$this->ujian->update_jawaban($id_tes, $input[$_tidsoal], $hasil);
 		}
 		$list_jawaban	= substr($list_jawaban, 0, -1);
@@ -426,6 +427,94 @@ class Ujian_essay extends CI_Controller {
 		// Simpan jawaban
 		$this->master->update('h_ujian_essay', $d_simpan, 'id', $id_tes);
 		$this->output_json(['status'=>true]);
+	}
+
+	public function simpan_akhir()
+	{
+		// Decrypt Id
+		$id_tes = $this->input->post('id', true);
+		$id_tes = $this->encryption->decrypt($id_tes);
+	
+		$d_update = [
+			'status'		=> 'N'
+		];
+
+		$this->master->update('h_ujian_essay', $d_update, 'id', $id_tes);
+		$this->output_json(['status'=>TRUE, 'data'=>$d_update, 'id'=>$id_tes]);
+	}
+
+	function nilai($id){
+		
+		$this->akses_dosen();
+		$hasil = $this->ujian->detail_ujian_essay($id)->row();
+        $user = $this->ion_auth->user()->row();
+        $data = [
+			'user' => $user,
+			'judul'	=> 'Ujian Essay',
+			'subjudul'=> 'Data Pengerjaan Ujian Essay',
+			'matkul'	=> $this->soal->getMatkulDosen($user->username),
+			'dosen' => $this->ujian->getIdDosen($user->username),
+			'es'	=> $id,
+			'ujian' => $hasil
+		];
+		
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('ujian_essay/data_nilai');
+		$this->load->view('_templates/dashboard/_footer.php');
+
+	}
+
+	public function data_penilaian($id=null)
+	{
+        $this->akses_dosen();
+
+		$this->output_json($this->ujian->jawab($id), false);
+	}
+
+	function hasil_jawaban($id){
+		$this->akses_dosen();
+		$user = $this->ion_auth->user()->row();
+		$jawab = $this->ujian->hasil_jawaban($id)->result();
+		$mahasiswa = $this->ujian->ambil_nim($id)->row();
+		$ujian = $this->ujian->ambil_nama_ujian($id)->row();
+        $data = [
+			'user' => $user,
+			'judul'	=> 'Ujian Essay',
+			'subjudul'=> 'Penilaian Ujian Essay',
+			'matkul'	=> $this->soal->getMatkulDosen($user->username),
+			'dosen' => $this->ujian->getIdDosen($user->username),
+			'id'	=> $id,
+			'mahasiswa' => $mahasiswa,
+			'jawab' => $jawab,
+			'ujian' => $ujian
+		];
+		
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('ujian_essay/hasil_jawaban');
+		$this->load->view('_templates/dashboard/_footer.php');
+	}
+
+	function save_hasil_jawaban(){
+		$id = $_POST['id_detail'];
+		$nilai = $_POST['nilai'];
+
+		$data = array();
+		
+		$index = 0; 
+		if(is_array($id) || is_object($id))
+		{
+			foreach($Article as $dataArticle){ 
+			array_push($data, array(
+				'id_detail'=>$id,
+				'nilai'=>$nilai[$index],  
+			));
+			
+			$index++;
+			}
+
+		}
+		
+		$sql = $this->nilai->save_batch($data);
 	}
     
 }

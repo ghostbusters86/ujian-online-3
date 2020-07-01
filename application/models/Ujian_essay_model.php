@@ -50,7 +50,7 @@ class Ujian_essay_model extends CI_Model {
 
     public function getListUjian($id, $kelas)
     {
-        $this->datatables->select("a.id_ujian_essay, e.nama_dosen, d.nama_kelas, a.nama_ujian_essay, b.nama_matkul, a.jumlah_soal, CONCAT(a.tanggal_mulai, ' <br/> (', a.waktu, ' Menit)') as waktu,  (SELECT COUNT(id) FROM h_ujian_essay h WHERE h.id_mahasiswa = {$id} AND h.id_ujian_essay = a.id_ujian_essay) AS ada");
+        $this->datatables->select("a.id_ujian_essay, e.nama_dosen, d.nama_kelas, a.nama_ujian_essay, b.nama_matkul, a.jumlah_soal, CONCAT(a.tanggal_mulai, ' <br/> (', a.waktu, ' Menit)') as waktu,  (SELECT COUNT(id) FROM h_ujian_essay h WHERE h.id_mahasiswa = {$id} AND h.id_ujian_essay = a.id_ujian_essay) AS ada, (SELECT status_penilaian FROM h_ujian_essay h WHERE h.id_mahasiswa = {$id} AND h.id_ujian_essay = a.id_ujian_essay) AS status_penilaian");
         $this->datatables->from('m_ujian_essay a');
         $this->datatables->join('matkul b', 'a.id_matkul = b.id_matkul');
         $this->datatables->join('kelas_dosen c', "a.id_dosen = c.dosen_id");
@@ -123,6 +123,48 @@ class Ujian_essay_model extends CI_Model {
         $this->db->where('id_soal_essay', $_tidsoal);
         $this->db->set('jawaban_essay', $jawaban_);
         return $this->db->update('detail_h_ujian_essay');
+    }
+
+    function jawab($id){
+        $this->datatables->select('a.id, c.nama_ujian_essay, b.nim, b.nama, a.tgl_mulai, a.tgl_selesai, a.nilai, a.status_penilaian');
+        $this->datatables->from('h_ujian_essay a');
+        $this->datatables->join('mahasiswa b', 'a.id_mahasiswa = b.id_mahasiswa');
+        $this->datatables->join('m_ujian_essay c', 'c.id_ujian_essay = a.id_ujian_essay');
+        $this->datatables->where('a.id_ujian_essay', $id);
+        $this->datatables->add_column('no', '');
+        return $this->datatables->generate();
+    }
+
+    function detail_ujian_essay($id){
+        $this->db->select('*');
+        $this->db->from('m_ujian_essay');
+        $this->db->where('id_ujian_essay', $id);
+        return $this->db->get();
+    }
+
+    function ambil_nim($id){
+        $this->db->select('a.nim, a.nama');
+        $this->db->from('mahasiswa a');
+        $this->db->join('h_ujian_essay b', 'a.id_mahasiswa = b.id_mahasiswa');
+        $this->db->where('b.id', $id);
+        return $this->db->get();
+    }
+
+    function ambil_nama_ujian($id){
+        $this->db->select('b.nama_ujian_essay');
+        $this->db->from('h_ujian_essay a');
+        $this->db->join('m_ujian_essay b', 'a.id_ujian_essay = b.id_ujian_essay');
+        $this->db->where('a.id', $id);
+        return $this->db->get();
+    }
+
+    function hasil_jawaban($id){
+        $this->db->select('a.id_detail, a.id, a.id_soal_essay, a.jawaban_essay, a.nilai, b.file, b.soal_essay');
+        $this->db->from('detail_h_ujian_essay a');
+        $this->db->join('tb_soal_essay b', 'a.id_soal_essay = b.id_soal_essay');
+        $this->db->where('a.id', $id);
+        $this->db->order_by('a.id_detail', 'asc');
+        return $this->db->get();
     }
 
 
