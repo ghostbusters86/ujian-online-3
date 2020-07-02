@@ -121,24 +121,31 @@
                    </div>
                    <?php echo form_open_multipart('tugas/save', array('id'=>'formUpload'))?>
                    <div class="modal-body">
+                   <div id="download" style="margin-bottom:15px"></div>
                         <div class="form-group">
-                            <label class="control-label col-xs-3" >Upload</label>
+                            <label class="col-xs-3" style="margin-top:15px">Upload</label>
                             <input name="method" id="method" class="form-control" type="hidden"  readonly>
                             <input name="id_hasil_tugas" id="id_hasil_tugas" class="form-control" type="hidden"  readonly>
                             <input name="id_tugas" id="id_tugas" class="form-control" type="hidden"   readonly>
                             <input name="nim" id="nim" class="form-control" type="hidden"   readonly>
-                            <div class="col-xs-9">
+                            <div class="col-xs-9" style="margin-top:15px">
                                 <input name="file_tugas" id="file_tugas" class="form-control" type="file" placeholder="File Tugas" required>
+                                
                             </div>
-                            
                         </div>
-
+                        <div class="form-group" >
+                            <label class="col-xs-3"style="margin-top:15px" >Deskripsi</label>
+                            <div class="col-xs-9" style="margin-top:15px">
+                            <textarea name="deskripsi" id="deskripsi" class="form-control" ></textarea>
+                            </div>
+                        </div>
+                            
                         
                    </div>
-                   <div id="download" style="margin-top:15px"></div>
+                   
                    <div class="modal-footer" >
-                    <button type="button" type="submit" id="btn_save" class="btn btn-primary">Simpan</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button style="margin-top:15px" type="button" type="submit" id="btn_save" class="btn btn-primary">Simpan</button>
+                    <button style="margin-top:15px" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                    </div>
                     </div>
                     <?php echo form_close(); ?>
@@ -175,50 +182,27 @@
         var kode=$(this).data('kode');
             $.ajax({
                 type : "GET",
-                url  : "<?php echo base_url() ?>tugas/cekWaktu/"+kode,
+                url  : "<?php echo base_url() ?>tugas/uploadTugasMahasiswa/"+kode,
                 dataType : "JSON",
                 success: function(data){
-                    if(data.mulai == 'belum mulai'){
-                        var tampilWarning = ''
-                        tampilWarning += `<div class="callout callout-warning">
-                            Belum waktunya untuk <strong>"UPLOAD TUGAS"</strong> <br/>
-                        </div>`;
-                        $('#tampilWarning').html(tampilWarning);
-                        $('#modalWarning').modal('show');
-                    }else if(data.mulai == 'sudah mulai' && data.hasil == 'telat'){
-                        var tampilWarning = ''
-                        tampilWarning += `<div class="callout callout-danger">
-                            Waktu untuk <strong>"UPLOAD TUGAS"</strong> sudah habis.<br/>
-                        </div>`;
-                        $('#tampilWarning').html(tampilWarning);
-                        $('#modalWarning').modal('show');
+                    console.log(data)
+                    var method
+                    $('[name="id_tugas"]').val(data.data[0]);
+                    $('[name="nim"]').val(data.data[1]);
+                    $('[name="deskripsi"]').val(data.rowdata.deskripsi);
+                    if(data.hasil == 'zonk'){
+                        method = 'add'
+                        $('[name="method"]').val(method);
                     }else{
-                        $.ajax({
-                            type : "GET",
-                            url  : "<?php echo base_url() ?>tugas/uploadTugasMahasiswa/"+kode,
-                            dataType : "JSON",
-                            success: function(data){
-                                console.log(data)
-                                var method
-                                $('[name="id_tugas"]').val(data.data[0]);
-                                $('[name="nim"]').val(data.data[1]);
-                                if(data.hasil == 'zonk'){
-                                    method = 'add'
-                                    $('[name="method"]').val(method);
-                                }else{
-                                    method = 'edit'
-                                    $('[name="method"]').val(method);
-                                    $('[name="id_hasil_tugas"]').val(data.rowdata.id);
-                                    var download = ''
-                                    download += '<br>'
-                                    download += '<center><a href="'+base_url+'tugas/downloadTugasMahasiswa/'+data.rowdata.tugas_mahasiswa+'" class="btn btn-success"><i class="fa fa-download"></i> Download File</a></center>'
-                                }
-                                $('#download').html(download);
-                                $('#uploadTugas').modal('show');
-                            }
-                        });
-                        return false;
+                        method = 'edit'
+                        $('[name="method"]').val(method);
+                        $('[name="id_hasil_tugas"]').val(data.rowdata.id);
+                        var download = ''
+                        download += '<strong>Tugas Yang Sudah Dikumpulkan : </strong><a href="'+base_url+'tugas/downloadTugasMahasiswa/'+data.rowdata.tugas_mahasiswa+'" class="btn btn-success"><i class="fa fa-download"></i> Download File</a>'
                     }
+                    $('#download').html(download);
+                    $('#uploadTugas').modal('show');
+                    
                 }
             });
             return false;

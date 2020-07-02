@@ -18,7 +18,8 @@ class Tugas_model extends CI_Model{
     public function getListTugas($id, $kelas)
     {
         $this->datatables->select("a.id_tugas, e.nama_dosen, d.nama_kelas, a.nama_tugas,  b.nama_matkul, (SELECT COUNT(id) FROM h_tugas h WHERE h.id_mahasiswa = {$id} AND h.id_tugas = a.id_tugas) AS ada, 
-        (SELECT nilai FROM h_tugas h WHERE h.id_mahasiswa = {$id} AND h.id_tugas = a.id_tugas) AS nilai, 
+        (SELECT nilai FROM h_tugas h WHERE h.id_mahasiswa = {$id} AND h.id_tugas = a.id_tugas) AS nilai,
+        (SELECT telat FROM h_tugas h WHERE h.id_mahasiswa = {$id} AND h.id_tugas = a.id_tugas) AS telat, 
         date_format(a.tanggal_mulai,'%m-%d-%Y %H:%i') as tanggal_mulai, date_format(a.terlambat,'%m-%d-%Y %H:%i') as terlambat");
         $this->datatables->from('m_tugas a');
         $this->datatables->join('matkul b', 'a.matkul_id = b.id_matkul');
@@ -88,7 +89,7 @@ class Tugas_model extends CI_Model{
     }
 
     public function cekWaktu($id){
-        $this->db->select("date_format(tanggal_mulai,'%d-%m-%Y %H:%i:%s') as tanggal_mulai, date_format(terlambat,'%d-%m-%Y %H:%i:%s') as terlambat");
+        $this->db->select("*");
         $this->db->where('id_tugas', $id);
         return $this->db->get('m_tugas')->row();
     }
@@ -99,13 +100,15 @@ class Tugas_model extends CI_Model{
         return $this->db->get('h_tugas');
     }
 
-    function add_tugas($id_tugas, $nim, $new_name, $tanggal, $ext){
+    function add_tugas($id_tugas, $nim, $new_name, $tanggal, $ext, $status, $deskripsi){
         $data = array(
             'id_tugas' => $id_tugas,
             'id_mahasiswa' => $nim,
             'tugas_mahasiswa' => $new_name,
             'waktu' => $tanggal,
-            'ext' => $ext
+            'ext' => $ext,
+            'telat' => $status, 
+            'deskripsi' => $deskripsi
         );
         return $this->db->insert('h_tugas', $data);
     }
@@ -115,7 +118,10 @@ class Tugas_model extends CI_Model{
         return $this->db->get('h_tugas');
     }
 
-    function update_tugas($id, $tugas, $tanggal, $ext){
+    function update_tugas($id, $tugas, $tanggal, $ext,  $status, $deskripsi){
+        $this->db->set('updated_at', $tanggal);
+        $this->db->set('deskripsi', $deskripsi);
+        $this->db->set('telat', $status);
         $this->db->set('waktu', $tanggal);
         $this->db->set('ext', $ext);
         $this->db->set('updated_at', $tanggal);

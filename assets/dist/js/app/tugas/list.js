@@ -117,6 +117,11 @@ $(document).ready(function () {
             if ( tanggalpatokan < tanggalsekarang && data.ada == '0') {
                 $('td', row).css('color', 'red');
             }
+
+            if (data.telat == 'Y') {
+                $('td', row).css('background-color', 'yellow');
+                $('td', row).css('color', 'black');
+            }
             
             
         }

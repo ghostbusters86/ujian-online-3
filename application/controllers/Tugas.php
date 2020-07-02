@@ -308,6 +308,7 @@ class Tugas extends CI_Controller {
 		$method = $this->input->post('method');
 		$id_tugas = $this->input->post('id_tugas');
 		$nim = $this->input->post('nim');
+		$deskripsi = $this->input->post('deskripsi');
 
 		$config['upload_path'] = FCPATH.'uploads/tugasMahasiswa/';
 		$config['encrypt_name'] = TRUE;
@@ -322,10 +323,17 @@ class Tugas extends CI_Controller {
 			if (!$this->upload->do_upload('file_tugas')) {
 				$data =  $this->upload->display_errors();
 			} else {
+				$cekwaktu = $this->tugas->cekWaktu($id_tugas);
+				$telat = $cekwaktu->terlambat;
 				$tanggal = date("Y-m-d H:i:s");
+				if($tanggal > $telat){
+					$status = 'Y';
+				}else{
+					$status = 'N';
+				}
 				$new_name = $this->upload->data('file_name');
 				$ext = $this->upload->data('file_ext');
-				$this->tugas->add_tugas($id_tugas, $nim, $new_name, $tanggal, $ext);
+				$this->tugas->add_tugas($id_tugas, $nim, $new_name, $tanggal, $ext, $status, $deskripsi);
 				$data =  'upload berhasil';
 			}
 
@@ -336,10 +344,17 @@ class Tugas extends CI_Controller {
 			if (!$this->upload->do_upload('file_tugas')) {
 				$data =  $this->upload->display_errors();
 			} else {
+				$cekwaktu = $this->tugas->cekWaktu($id_tugas);
+				$telat = $cekwaktu->terlambat;
 				$tanggal = date("Y-m-d H:i:s");
+				if($tanggal > $telat){
+					$status = 'Y';
+				}else{
+					$status = 'N';
+				}
 				$new_name = $this->upload->data('file_name');
 				$ext = $this->upload->data('file_ext');
-				$this->tugas->update_tugas($id_hasil_tugas, $new_name, $tanggal, $ext);
+				$this->tugas->update_tugas($id_hasil_tugas, $new_name, $tanggal, $ext, $status, $deskripsi);
 				unlink($file.$fileLama);
 				$data =  'upload berhasil';
 			}

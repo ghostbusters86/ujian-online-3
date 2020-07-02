@@ -87,12 +87,18 @@
                     tabel += '<th>Nama</th>'
                     tabel += '<th>File Tugas</th>'
                     tabel += '<th>Tanggal Mengumpulkan</th>'
+                    tabel += '<th>Status</th>'
                     tabel += '<th>Nilai</th>'
                     tabel += '<th>Aksi</th>'
                     tabel += '</tr>'
                         if(data.length > 0){
                             no = 1;
                             for(i=0; i<data.length; i++){
+                                if(data[i].telat == 'Y'){
+                                    status = 'Terlambat';
+                                }else{
+                                    status = 'Tidak Terlambat';
+                                }
                                 tabel += '<tr>'
                                 tabel += '<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">'
                                 tabel += '<th><input type="checkbox" class="check-item" id="tugas_'+i+'"  name="tugas" value="'+data[i].tugas_mahasiswa+'"></th>'
@@ -101,6 +107,7 @@
                                 tabel += '<th>'+data[i].nama+'</th>'
                                 tabel += '<th>'+data[i].tugas_mahasiswa+'</th>'
                                 tabel += '<th>'+data[i].waktu+'</th>'
+                                tabel += '<th>'+status+'</th>'
                                 tabel += '<th><input type="text" class="form-control" id="nilai_'+i+'"  name="nilai[]" value="'+data[i].nilai+'"></th>'
                                 tabel += '<th><a href="'+base_url+'hasiltugas/preview/'+data[i].tugas_mahasiswa+'" class="btn btn-xs bg-maroon" target:"_blank" > Preview </a></th>'
                                 tabel += '</tr>'
