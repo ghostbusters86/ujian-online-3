@@ -36,7 +36,7 @@
                         <thead>
                             <tr>
                                 <td>No</td>
-                                <td>NIM</td>
+                                <td>NPP</td>
                                 <td>Nama</td>
                                 <td>Email</td>
                                 <td>Jenis Kelamin</td>

@@ -31,7 +31,7 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            <th>Nim</th>
+                            <th>NPP</th>
                             <th>Nama</th>
                             <th>Tanggal Mulai</th>
                             <th>Tanggal Selesai</th>
@@ -42,7 +42,7 @@
                     <tfoot>
                         <tr>
                             <th>No.</th>
-                            <th>Nim</th>
+                            <th>NPP</th>
                             <th>Nama</th>
                             <th>Tanggal Mulai</th>
                             <th>Tanggal Selesai</th>

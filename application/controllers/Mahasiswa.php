@@ -81,7 +81,7 @@ class Mahasiswa extends CI_Controller
 			$u_nim		= $dbdata->nim === $nim ? "" : "|is_unique[mahasiswa.nim]";
 			$u_email	= $dbdata->email === $email ? "" : "|is_unique[mahasiswa.email]";
 		}
-		$this->form_validation->set_rules('nim', 'NIM', 'required|numeric|trim|min_length[8]|max_length[12]' . $u_nim);
+		$this->form_validation->set_rules('nim', 'NIM', 'required|numeric|trim|min_length[7]|max_length[7]' . $u_nim);
 		$this->form_validation->set_rules('nama', 'Nama', 'required|trim|min_length[3]|max_length[50]');
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email' . $u_email);
 		$this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');

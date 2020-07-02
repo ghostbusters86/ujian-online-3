@@ -23,7 +23,7 @@
                     <p><?=$ujian->nama_ujian_essay?></p>
                 </div>
                 <div class="alert bg-purple">
-                    <h4>NIM <i class="fa fa-address-book-o pull-right"></i></h4>
+                    <h4>NPP <i class="fa fa-address-book-o pull-right"></i></h4>
                     <p><?=$mahasiswa->nim?></p>
                 </div>
                 <div class="alert bg-purple">

@@ -12,8 +12,8 @@
             <div class="col-sm-4 col-sm-offset-4">
                 <?=form_open('mahasiswa/save', array('id'=>'mahasiswa'), array('method'=>'add'))?>
                     <div class="form-group">
-                        <label for="nim">NIM</label>
-                        <input autofocus="autofocus" onfocus="this.select()" placeholder="NIM" type="text" name="nim" class="form-control">
+                        <label for="nim">NPP</label>
+                        <input autofocus="autofocus" onfocus="this.select()" placeholder="NPP" type="text" name="nim" class="form-control">
                         <small class="help-block"></small>
                     </div>
                     <div class="form-group">
