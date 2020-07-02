@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 02 Jul 2020 pada 16.04
+-- Waktu pembuatan: 02 Jul 2020 pada 16.09
 -- Versi server: 10.1.26-MariaDB
 -- Versi PHP: 7.0.23
 
@@ -98,7 +98,7 @@ CREATE TABLE `groups` (
 INSERT INTO `groups` (`id`, `name`, `description`) VALUES
 (1, 'admin', 'Administrator'),
 (2, 'dosen', 'Pembuat Soal dan ujian'),
-(3, 'praja', 'Peserta Ujian');
+(3, 'mahasiswa', 'Peserta Ujian');
 
 -- --------------------------------------------------------
 
@@ -372,7 +372,8 @@ INSERT INTO `m_tugas` (`id_tugas`, `dosen_id`, `matkul_id`, `nama_tugas`, `deskr
 (14, 1, 1, 'baru', 'ini data baru', '5eeccc5342cacc89a949e18f55948ad6.png', '2020-06-19 10:07:03', '2020-06-19 10:07:04', 'WZMEO', '2020-06-19 03:07:06', '2020-06-19 03:07:06'),
 (15, 3, 5, 'tugas pertam', 'ini tugas ertama', '69e224e9a7e54f84f63ca919c75b0e49.docx', '2020-06-22 23:06:16', '2020-06-24 23:06:17', 'OATGJ', '2020-06-21 16:06:20', '2020-06-21 16:06:20'),
 (16, 1, 1, 'tugas coba', 'fdafagaga', 'f874f8a8aac57fbcdeae0bc26ace63f5.docx', '2020-06-25 13:04:56', '2020-06-25 15:04:57', 'RQRND', '2020-06-25 06:05:07', '2020-06-25 06:05:07'),
-(17, 1, 1, 'aha', 'ahahaha', '140aa5cabaadbfc3cffb0fb3b5741981.docx', '2020-06-25 14:50:35', '2020-06-25 17:50:36', 'LBIGD', '2020-06-25 07:50:41', '2020-06-25 07:50:41');
+(17, 1, 1, 'aha', 'ahahaha', '140aa5cabaadbfc3cffb0fb3b5741981.docx', '2020-06-25 14:50:35', '2020-06-25 17:50:36', 'LBIGD', '2020-06-25 07:50:41', '2020-06-25 07:50:41'),
+(18, 1, 1, 'hahahaha', 'ini deskripsi', '', '2020-07-02 16:07:38', '2020-07-03 16:07:40', 'EPTSA', '2020-07-02 09:07:43', '2020-07-02 09:07:43');
 
 -- --------------------------------------------------------
 
@@ -533,8 +534,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
 (1, '127.0.0.1', 'Administrator', '$2y$12$tGY.AtcyXrh7WmccdbT1rOuKEcTsKH6sIUmDr0ore1yN4LnKTTtuu', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1593680560, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
-(3, '::1', '12183018', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'mahasiswa@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550225511, 1593675805, 1, 'Muhammad', 'Arfananda', NULL, NULL),
-(4, '::1', '12345678', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'dosen@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550226286, 1593676012, 1, 'Koro', 'Sensei', NULL, NULL),
+(3, '::1', '12183018', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'mahasiswa@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550225511, 1593680881, 1, 'Muhammad', 'Arfananda', NULL, NULL),
+(4, '::1', '12345678', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'dosen@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1550226286, 1593680840, 1, 'Koro', 'Sensei', NULL, NULL),
 (8, '::1', '01234567', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'dosen2@gmail.com', NULL, NULL, NULL, NULL, NULL, '37a14617afdd7655e0899c840e6ebd642153de45', '$2y$10$1wo2JZVFsWwtDzeHDQzYZOiDKkalhwQG7xWsLQTfQy5HRP1j4L24q', 1550289356, 1592755449, 1, 'Tobirama', 'Sensei', NULL, NULL),
 (9, '::1', '20000000', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'telo@gmail.com', NULL, NULL, NULL, NULL, NULL, 'b6506e1ea4dff1530c7b893eaffe8c287ec92503', '$2y$10$xVQ0eB6DKNjZ0BNODi9wjO0.3GTy9jIVrxII/YANqfwoUyn75rq62', 1550289356, 1592832398, 1, 'Telo', 'Goreng', NULL, NULL),
 (10, '::1', '30000000', '$2y$10$yVOPJCnjxn326AJfcBduku6R2U2hnz9g2xfZkEVaTVRq69BGcX0bi', 'ayam@gmail.com', NULL, NULL, NULL, NULL, NULL, 'fc5ccc2adbdeb25f30f6fb7ee46c07ffea36f45c', '$2y$10$UPsdhtSo9poOiFGdwHng/..gVDtqGMU4w/usuUF9NkDQ9AgdCk7dO', 1550289356, 1592831232, 1, 'Ayam', 'Bakar', NULL, NULL);
@@ -791,7 +792,7 @@ ALTER TABLE `matkul`
 -- AUTO_INCREMENT untuk tabel `m_tugas`
 --
 ALTER TABLE `m_tugas`
-  MODIFY `id_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_tugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT untuk tabel `m_ujian`
