@@ -75,134 +75,107 @@
     </div>
 </div>
 
-         <!-- <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+         <div class="modal fade" id="modalAbsen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                <div class="modal-content">
                    <div class="modal-header">
                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                       <h4 class="modal-title" id="myModalLabel">Detail Tugas</h4>
+                       <h4 class="modal-title" id="myModalLabel">Isi Absensi</h4>
                    </div>
                    <div class="modal-body">
-                       <div id="tampilData"></div>
-
+                   <?php //echo form_open('', array('id'=>'formSimpan'))?>
+                   <div class="form-group">
+                            <label class="col-xs-3"">Token</label>
+                
+                            <input name="id_pertemuan" id="id_pertemuan" class="form-control" type="hidden"   readonly>
+                            <input name="id_mahasiswa" id="id_mahasiswa" class="form-control" type="hidden"   readonly>
+                            <div class="col-xs-9"">
+                                <input name="token" id="token" class="form-control" type="text" placeholder="Token" required>
+                            </div>
+                        </div>
                    </div>
                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                   <button style="margin-top:15px" type="button" type="submit" id="simpan_absensi" class="btn btn-primary">Simpan</button>
+                    <button style="margin-top:15px" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                    </div>
+
+                   <?php //echo form_close(); ?>
                     </div>
             </div>
          </div>
-
-         <div class="modal fade" id="modalWarning" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-               <div class="modal-content">
-                   <div class="modal-header">
-                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                       <h4 class="modal-title" id="myModalLabel">Upload Tugas</h4>
-                   </div>
-                   <div class="modal-body">
-                       <div id="tampilWarning"></div>
-
-                   </div>
-                   <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                   </div>
-                    </div>
-            </div>
-         </div> -->
-
-         
          
          
 <script src="<?=base_url()?>assets/dist/js/app/absensi/list.js"></script>
 
 <script>
-    // $('#tugas').on('click','.detailTugas',function(){
-    //     var kode=$(this).data('kode');
-    //         $.ajax({
-    //             type : "GET",
-    //             url  : "<?php //echo base_url() ?>tugas/detailTugas/"+kode,
-    //             dataType : "JSON",
-    //             success: function(data){
-    //                 var tampil = ''
-    //                     tampil += '<p><b>Judul Tugas : '+data.nama_tugas+'</b></p>'
-    //                     tampil += '<p>Deskripsi : '+data.deskripsi_tugas+'</p>'
-    //                     if(data.file_tugas == ''){
-    //                         tampil += ''
-    //                     }else{
-    //                         tampil += '<center><a href="'+base_url+'tugas/downloadTugas/'+data.file_tugas+'" class="btn btn-success"><i class="fa fa-download"></i> Download File</a></center>'
-    //                     }
-    //                 $('#tampilData').html(tampil);
-    //                 $('#modalDetail').modal('show');
-    //             }
-    //         });
-    //         return false;
+    $('#absensi').on('click','.isi_absen',function(){
+        var kode=$(this).data('kode');
+            $.ajax({
+                type : "GET",
+                url  : "<?php echo base_url() ?>absensi/cekdata/"+kode,
+                dataType : "JSON",
+                success: function(data){
+                    // console.log(data)
+                    if(data.status == 'telat'){
+                        Swal({
+                            "title": 'Gagal',
+                            "text": 'Waktu isi absensi anda telah habis',
+                            "type": 'warning'
+                        }).then((result) => {
+                            reload_ajax();
+                        });
+                    }else{
+                        $('[name="id_pertemuan"]').val(kode);
+                        $('[name="id_mahasiswa"]').val(data.id_mhs);
+                        $('#modalAbsen').modal('show');
+                    }
+                }
+            });
+            return false;
             
-    // });
+    });
 
-    // $('#tugas').on('click','.uploadTugas',function(){
-    //     var kode=$(this).data('kode');
-    //         $.ajax({
-    //             type : "GET",
-    //             url  : "<?php //echo base_url() ?>tugas/uploadTugasMahasiswa/"+kode,
-    //             dataType : "JSON",
-    //             success: function(data){
-    //                 console.log(data)
-    //                 var method
-    //                 $('[name="id_tugas"]').val(data.data[0]);
-    //                 $('[name="nim"]').val(data.data[1]);
-    //                 $('[name="deskripsi"]').val(data.rowdata.deskripsi);
-    //                 if(data.hasil == 'zonk'){
-    //                     method = 'add'
-    //                     $('[name="method"]').val(method);
-    //                 }else{
-    //                     method = 'edit'
-    //                     $('[name="method"]').val(method);
-    //                     $('[name="id_hasil_tugas"]').val(data.rowdata.id);
-    //                     var download = ''
-    //                     download += '<strong>Tugas Yang Sudah Dikumpulkan : </strong><a href="'+base_url+'tugas/downloadTugasMahasiswa/'+data.rowdata.tugas_mahasiswa+'" class="btn btn-success"><i class="fa fa-download"></i> Download File</a>'
-    //                 }
-    //                 $('#download').html(download);
-    //                 $('#uploadTugas').modal('show');
+
+    $('#simpan_absensi').on('click', function (e) {
+        // e.preventDefault(); 
+        var id_pertemuan = $('#id_pertemuan').val();
+        var id_mahasiswa = $('#id_mahasiswa').val();
+        var token = $('#token').val();
+            $.ajax({
+                url:'<?php echo base_url();?>/absensi/simpan_absensi',
+                type:"POST",
+                dataType : "JSON",
+                data : {id_pertemuan:id_pertemuan, id_mahasiswa:id_mahasiswa, token:token},
+                success: function(data){
                     
-    //             }
-    //         });
-    //         return false;
-            
-    // });
-
-    // $('#btn_save').on('click', function (e) {
-    //     e.preventDefault(); 
-    //         $.ajax({
-    //             url:'<?php //echo base_url();?>index.php/tugas/do_upload_mahasiswa',
-    //             type:"post",
-    //             data:new FormData(document.getElementById("formUpload")),
-    //             processData:false,
-    //             contentType:false,
-    //             cache:false,
-    //             async:false,
-    //             success: function(data){
-    //                 if(data == '"upload berhasil"'){
-    //                     title = 'Sukses' 
-    //                     text  = "Data Berhasil disimpan"
-    //                     type  = "success"
-    //                 }else{
-    //                     title = 'Gagal' 
-    //                     text  = data
-    //                     type  = "warning"
-    //                 }
-    //                 Swal({
-    //                     "title": title,
-    //                     "text": text,
-    //                     "type": type
-    //                 }).then((result) => {
-    //                     document.getElementById("formUpload").reset();
-    //                     $('#uploadTugas').modal('hide');
-    //                     reload_ajax();
-    //                 });
-
-                    
-    //             }
-    //         });
-    // });
+                    if(data.status == 'Terlambat'){
+                        Swal({
+                            "title": 'Gagal',
+                            "text": 'Waktu isi absensi anda telah habis',
+                            "type": 'warning'
+                        }).then((result) => {
+                            $('#modalAbsen').modal('hide');
+                            reload_ajax();
+                        });
+                    }else if(data.status == 'Token Salah'){
+                        Swal({
+                            "title": 'Gagal',
+                            "text": 'Token yang dimasukkan salah',
+                            "type": 'warning'
+                        }).then((result) => {
+                            reload_ajax();
+                        });
+                    }else{
+                        Swal({
+                            "title": 'Berhasil',
+                            "text": 'Data Absensi anda sudah tersimpan',
+                            "type": 'success'
+                        }).then((result) => {
+                            $('#modalAbsen').modal('hide');
+                            reload_ajax();
+                        });
+                    }
+                }
+            });
+    });
 </script>

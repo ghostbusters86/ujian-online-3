@@ -36,12 +36,12 @@ $(document).ready(function () {
             
             { "data": 'tanggal_mulai' },
             
-            { "data": 'tanggal_selesai',
-                render: function ( data, type, row ) {
-                return data;
-                } 
+            { "data": 'tanggal_selesai' 
+            
             },
-            { "data": 'status' },
+            { "data": 'keterangan', 
+            "orderable": false,
+            "searchable": false},
             {
                 
                 "searchable": false,
@@ -97,9 +97,9 @@ $(document).ready(function () {
                     }else{
                         if(tanggalsekarang > tanggalmulai && tanggalsekarang < tanggalselesai && data.status == null){
                             return `<div class="text-center">
-                                        <a class="btn btn-xs btn-success" href="${base_url}absensi/mulaiAbsen/${data.id_pertemuan}" >
-                                            <i class="fa fa-rocket"></i> Mulai Absen
-                                        </a>
+                                        
+                                        <a href="javascript:void(0);" class="isi_absen btn btn-success btn-xs" data-kode="${data.id_pertemuan}"><i class="fa fa-rocket"></i> Isi Absen</a>
+                                            
                                     </div>`;
                         }else if(tanggalsekarang > tanggalmulai && tanggalsekarang > tanggalselesai && data.status == null){
                             return `<span class="btn btn-xs btn-danger" >
@@ -115,7 +115,7 @@ $(document).ready(function () {
                             </span>`;
                         }
 
-                        console.log(data)
+                        
                     }
                 }
             }

@@ -62,4 +62,16 @@ class Pertemuan_model extends CI_Model{
         return $this->db->get()->row();
     }
 
+    function cekwaktu($id){
+        $this->db->where('id_pertemuan', $id);
+        return $this->db->get('m_pertemuan');
+    }
+
+    function simpan_absensi($id, $mahasiswa, $image_name, $jamsekarang, $hadir){
+        $query = $this->db->query("
+            insert into h_absensi (id_pertemuan, id_mahasiswa, ttd_digital, waktu, keterangan) values ('$id', '$mahasiswa', '$image_name', '$jamsekarang', '$hadir')
+        ");
+        return $query;
+    }
+
 }

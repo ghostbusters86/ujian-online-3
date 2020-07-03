@@ -76,5 +76,66 @@ class Absensi extends CI_Controller{
 		$this->load->view('_templates/dashboard/_footer.php');
 	}
 
+	function cekdata($id){
+		$jamsekarang = date("Y-m-d H:i:s");
+		$mahasiswa 	= $this->pertemuan->getIdMahasiswa($this->user->username);
+		$id_mahasiswa = $mahasiswa->id_mahasiswa;
+		$cek = $this->pertemuan->cekwaktu($id)->row();
+		if($jamsekarang > $cek->tanggal_selesai){
+			$status = 'telat';
+			$data = 'kosong';
+		}else{
+			$status = 'masuk';
+			$data = $cek;
+		}
+		header('Content-Type: application/json');
+		echo json_encode(array('data'=>$data, 'status'=>$status, 'id_mhs'=>$id_mahasiswa));
+	}
+
+	function simpan_absensi(){
+		$id = $this->input->post('id_pertemuan');
+		$mahasiswa = $this->input->post('id_mahasiswa');
+		$token = $this->input->post('token');
+		$jamsekarang = date("Y-m-d H:i:s");
+		$cek = $this->pertemuan->cekwaktu($id)->row();
+		if($jamsekarang > $cek->tanggal_selesai){
+			$hasil['status'] = 'Terlambat';
+		}else{
+			if($cek->token != $token){
+				$hasil['status'] = 'Token Salah';
+			}else{
+				$hasil['status'] = 'Berhasil';
+				$ttd = uniqid();
+
+				$this->load->library('ciqrcode'); //pemanggilan library QR CODE
+ 
+                $config['cacheable']    = true; //boolean, the default is true
+                $config['cachedir']     = './assets/'; //string, the default is application/cache/
+                $config['errorlog']     = './assets/'; //string, the default is application/logs/
+                $config['imagedir']     = './uploads/absensi/'; //direktori penyimpanan qr code
+                $config['quality']      = true; //boolean, the default is true
+                $config['size']         = '1024'; //interger, the default is 1024
+                $config['black']        = array(224,255,255); // array, default is array(255,255,255)
+                $config['white']        = array(70,130,180); // array, default is array(0,0,0)
+                $this->ciqrcode->initialize($config);
+        
+                $image_name=$ttd.'.png'; //buat name dari qr code sesuai dengan nim
+        
+                $params['data'] = $ttd; //data yang akan di jadikan QR CODE
+                $params['level'] = 'H'; //H=High
+                $params['size'] = 10;
+                $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+				$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+				
+				$hadir = 'H';
+				$this->pertemuan->simpan_absensi($id, $mahasiswa, $image_name, $jamsekarang, $hadir);
+			}
+			
+			
+		}
+		header('Content-Type: application/json');
+		echo json_encode($hasil);
+	}
+
 
 }

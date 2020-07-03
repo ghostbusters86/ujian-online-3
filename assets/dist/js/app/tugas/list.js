@@ -34,10 +34,7 @@ $(document).ready(function () {
             
             { "data": 'tanggal_mulai' },
             
-            { "data": 'terlambat',
-                render: function ( data, type, row ) {
-                return data;
-                } 
+            { "data": 'terlambat'
             },
             { "data": 'nilai' },
             { 
@@ -45,7 +42,9 @@ $(document).ready(function () {
                 "searchable": false,
                 "orderable": false 
             },
-            { "data": 'ada' },
+            { "data": 'ada',
+            "orderable": false,
+            "searchable": false},
             {
                 "data": 'action',
                 "searchable": false,
