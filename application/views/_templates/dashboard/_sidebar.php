@@ -120,6 +120,20 @@
 				</a>
 			</li>
 			<?php endif; ?>
+			<?php if( $this->ion_auth->in_group('dosen') ) : ?>
+			<li class="<?=$page==='pertemuan'?"active":""?>">
+				<a href="<?=base_url('pertemuan/master')?>" rel="noopener noreferrer">
+					<i class="fa fa-gift"></i> <span>Materi Pertemuan</span>
+				</a>
+			</li>
+			<?php endif; ?>
+			<?php if( $this->ion_auth->in_group('mahasiswa') ) : ?>
+			<li class="<?=$page==='absensi'?"active":""?>">
+				<a href="<?=base_url('absensi/list_pertemuan')?>" rel="noopener noreferrer">
+					<i class="fa fa-chrome"></i> <span>Absensi</span>
+				</a>
+			</li>
+			<?php endif; ?>
 			<?php if( $this->ion_auth->in_group('mahasiswa') ) : ?>
 			<li class="<?=$page==='ujian'?"active":""?>">
 				<a href="<?=base_url('ujian/list_ujian')?>" rel="noopener noreferrer">
