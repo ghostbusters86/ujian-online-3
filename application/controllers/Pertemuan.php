@@ -65,6 +65,7 @@ class Pertemuan extends CI_Controller{
 		$this->akses_dosen();
 		
 		$user = $this->ion_auth->user()->row();
+		$kelas = $this->pertemuan->get_all_kelas()->result();
 
         $data = [
 			'user' 		=> $user,
@@ -72,6 +73,7 @@ class Pertemuan extends CI_Controller{
 			'subjudul'	=> 'Tambah Pertemuan',
 			'matkul'	=> $this->pertemuan->getMatkulDosen($user->username),
 			'dosen'		=> $this->pertemuan->getIdDosen($user->username),
+			'kelas'		=> $kelas
 		];
 
 		$this->load->view('_templates/dashboard/_header.php', $data);
@@ -115,6 +117,7 @@ class Pertemuan extends CI_Controller{
 
 		$method 		= $this->input->post('method', true);
 		$dosen_id 		= $this->input->post('dosen_id', true);
+		$kelas 			= $this->input->post('id_kelas', true);
 		$matkul_id 		= $this->input->post('matkul_id', true);
 		$nama_pertemuan = $this->input->post('nama_pertemuan', true);
 		$materi 		= $this->input->post('materi', true);
@@ -137,11 +140,13 @@ class Pertemuan extends CI_Controller{
 				'materi'            => $materi,
 				'tanggal_mulai'     => $tgl_mulai,
                 'tanggal_selesai' 	=> $tgl_selesai,
-                'token'             => $token
+				'token'             => $token,
+				'id_kelas'			=> $kelas
 			];
 			if($method === 'add'){
 				$input['id_dosen']	= $dosen_id;
 				$input['id_matkul'] = $matkul_id;
+				// $input['id_kelas']  = $kelas;
 				$input['token']		= $token;
 				if(!empty($_FILES['file_materi']['name'])){
 					if (!$this->upload->do_upload('file_materi')){
@@ -207,7 +212,7 @@ class Pertemuan extends CI_Controller{
 		$this->akses_dosen();
 		
 		$user = $this->ion_auth->user()->row();
-
+		$kelas = $this->pertemuan->get_all_kelas()->result();
         $data = [
 			'user' 		=> $user,
 			'judul'		=> 'Pertemuan',
@@ -215,6 +220,7 @@ class Pertemuan extends CI_Controller{
 			'matkul'	=> $this->pertemuan->getMatkulDosen($user->username),
 			'dosen'		=> $this->pertemuan->getIdDosen($user->username),
 			'pertemuan'	=> $this->pertemuan->getPertemuanById($id),
+			'kelas'		=> $kelas
 		];
 
 		$this->load->view('_templates/dashboard/_header.php', $data);

@@ -22,6 +22,7 @@
 					<input type="checkbox" class="select_all">
 				</th>
                 <th>No.</th>
+                <th>Kelas</th>
                 <th>Nama Pertemuan</th>
                 <th>Materi</th>
                 <th>File</th>
@@ -38,6 +39,7 @@
 					<input type="checkbox" class="select_all">
 				</th>
                 <th>No.</th>
+                <th>Kelas</th>
                 <th>Nama Pertemuan</th>
                 <th>Materi</th>
                 <th>File</th>

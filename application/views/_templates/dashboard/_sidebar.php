@@ -157,6 +157,11 @@
 			<?php endif; ?>
 			<?php if( !$this->ion_auth->in_group('mahasiswa') ) : ?>
 			<li class="header">REPORTS</li>
+			<li class="<?=$page==='absensi'?"active":""?>">
+				<a href="<?=base_url('absensi')?>" rel="noopener noreferrer">
+					<i class="fa fa-file"></i> <span>Rekap Absensi</span>
+				</a>
+			</li>
 			<li class="<?=$page==='hasilujian'?"active":""?>">
 				<a href="<?=base_url('hasilujian')?>" rel="noopener noreferrer">
 					<i class="fa fa-file"></i> <span>Hasil Ujian</span>

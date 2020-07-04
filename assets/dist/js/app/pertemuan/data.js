@@ -33,6 +33,7 @@ $(document).ready(function () {
                 "orderable": false,
                 "searchable": false
             },
+            { "data": 'nama_kelas' },
             { "data": 'nama_pertemuan' },
             {
                 "data": 'materi',
@@ -61,7 +62,7 @@ $(document).ready(function () {
                 }
             },
             {
-                "targets": 8,
+                "targets": 9,
                 "data": "token",
                 "render": function (data, type, row, meta) {
                     return `<div class="text-center">
@@ -70,7 +71,7 @@ $(document).ready(function () {
                 }
             },
             {
-                "targets": 9,
+                "targets": 10,
                 "data": "id_pertemuan",
                 "render": function (data, type, row, meta) {
                     return `<div class="text-center">

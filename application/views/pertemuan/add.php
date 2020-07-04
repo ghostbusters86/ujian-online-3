@@ -22,6 +22,22 @@
             <div class="col-sm-4">
             <?php echo form_open_multipart('pertemuan/save', array('id'=>'formpertemuan'), array('method'=>'add','dosen_id'=>$dosen->id_dosen, 'matkul_id'=>$matkul->matkul_id))?>
                 <div class="form-group">
+                    <label for="id_kelas">Kelas</label>
+                    <select id="id_kelas" name="id_kelas" class="form-control">
+                        <?php 
+                            foreach ($kelas as $datakelas) {
+                                # code...
+                                echo '
+                                    <option value="'.$datakelas->id_kelas.'">'.$datakelas->nama_kelas.'</option>
+                                ';
+                            }
+                        ?>
+                        
+                    </select>
+                    <!-- <input autofocus="autofocus" onfocus="this.select()" placeholder="Nama Pertemuan" type="text" class="form-control" name="nama_pertemuan"> -->
+                    <small class="help-block"></small>
+                </div>
+                <div class="form-group">
                     <label for="nama_pertemuan">Nama Pertemuan</label>
                     <input autofocus="autofocus" onfocus="this.select()" placeholder="Nama Pertemuan" type="text" class="form-control" name="nama_pertemuan">
                     <small class="help-block"></small>

@@ -22,6 +22,28 @@
             <div class="col-sm-4">
                 <?=form_open('pertemuan/save', array('id'=>'formpertemuan'), array('method'=>'edit','dosen_id'=>$dosen->id_dosen, 'matkul_id'=>$matkul->matkul_id, 'id_pertemuan'=>$pertemuan->id_pertemuan))?>
                 <div class="form-group">
+                    <label for="id_kelas">Kelas</label>
+                    <select id="id_kelas" name="id_kelas" class="form-control">
+                        <?php 
+                            foreach ($kelas as $datakelas) {
+                                # code...
+                                if($datakelas->id_kelas == $pertemuan->id_kelas){ 
+                                   $selected = 'selected'; 
+                                }else{
+                                    $selected = '';
+                                }
+                                echo '
+                                    <option value="'.$datakelas->id_kelas.'" '.$selected.' >'.$datakelas->nama_kelas.'</option>
+                                ';
+                            }
+                        ?>
+                        
+                    </select>
+                    <!-- <input autofocus="autofocus" onfocus="this.select()" placeholder="Nama Pertemuan" type="text" class="form-control" name="nama_pertemuan"> -->
+                    <small class="help-block"></small>
+                </div>
+                
+                <div class="form-group">
                     <label for="nama_pertemuan">Nama pertemuan</label>
                     <input value="<?=$pertemuan->nama_pertemuan?>" autofocus="autofocus" onfocus="this.select()" placeholder="Nama pertemuan" type="text" class="form-control" name="nama_pertemuan">
                     <small class="help-block"></small>

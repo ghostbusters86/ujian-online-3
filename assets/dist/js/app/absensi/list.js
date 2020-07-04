@@ -58,7 +58,7 @@ $(document).ready(function () {
                     "tanggal_selesai" : "tanggal_selesai"
                 },
                 "render": function (data, type, row, meta) {
-                    
+                    console.log(data)
                     var date = new Date(Date.now());
                     // sometimes even the US needs 24-hour time
                     options = {
@@ -95,21 +95,21 @@ $(document).ready(function () {
                                 <i class="fa  fa-clock-o"></i> Belum Mulai
                             </span>`;
                     }else{
-                        if(tanggalsekarang > tanggalmulai && tanggalsekarang < tanggalselesai && data.status == null){
+                        if(tanggalsekarang > tanggalmulai && tanggalsekarang < tanggalselesai && data.status == '0'){
                             return `<div class="text-center">
                                         
-                                        <a href="javascript:void(0);" class="isi_absen btn btn-success btn-xs" data-kode="${data.id_pertemuan}"><i class="fa fa-rocket"></i> Isi Absen</a>
+                                        <a href="javascript:void(0);" class="isi_absen btn btn-primary btn-xs" data-kode="${data.id_pertemuan}"><i class="fa fa-rocket"></i> Isi Absen</a>
                                             
                                     </div>`;
-                        }else if(tanggalsekarang > tanggalmulai && tanggalsekarang > tanggalselesai && data.status == null){
+                        }else if(tanggalsekarang > tanggalmulai && tanggalsekarang > tanggalselesai && data.status == '0'){
                             return `<span class="btn btn-xs btn-danger" >
                                 <i class="fa fa-close"></i> Terlambat Absen
                             </span>`;
-                        }else if(tanggalsekarang > tanggalmulai && tanggalsekarang < tanggalselesai && data.status != null){
+                        }else if(tanggalsekarang > tanggalmulai && tanggalsekarang < tanggalselesai && data.status == '1'){
                             return `<span class="btn btn-xs btn-success" >
                                 <i class="fa fa-check-circle-o"></i> Sudah Absen
                             </span>`;
-                        }else if(tanggalsekarang > tanggalmulai && tanggalsekarang > tanggalselesai && data.status != null){
+                        }else if(tanggalsekarang > tanggalmulai && tanggalsekarang > tanggalselesai && data.status == '1'){
                             return `<span class="btn btn-xs btn-success" >
                                 <i class="fa fa-check-circle-o"></i> Sudah Absen
                             </span>`;

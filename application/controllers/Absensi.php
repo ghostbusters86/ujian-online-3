@@ -138,4 +138,90 @@ class Absensi extends CI_Controller{
 	}
 
 
+	public function index()
+	{
+		$data = [
+			'user' => $this->user,
+			'judul'	=> 'Absensi',
+			'subjudul'=> 'Rekap Absensi',
+		];
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('absensi/rekap_absensi');
+		$this->load->view('_templates/dashboard/_footer.php');
+	}
+
+
+
+	public function data()
+	{
+		$nip_dosen = null;
+		
+		if( $this->ion_auth->in_group('dosen') ) {
+			$nip_dosen = $this->user->username;
+		}
+
+		$this->output_json($this->pertemuan->getRekapAbsensi($nip_dosen), false);
+	}
+
+
+	function tampil_absensi($id){
+		
+		$this->akses_dosen();
+		$getkelas = $this->pertemuan->get_kelas($id)->row();
+		$kelas = $getkelas->id_kelas;
+		$absensi = $this->pertemuan->detail_absensi($kelas, $id)->result();
+        $user = $this->ion_auth->user()->row();
+        $data = [
+			'user' => $user,
+			'judul'	=> 'Absensi',
+			'subjudul'=> 'Rekap data absensi',
+			'matkul'	=> $this->pertemuan->getMatkulDosen($user->username),
+			'dosen' => $this->pertemuan->getIdDosen($user->username),
+			'id'	=> $id,
+			'pertemuan' => $getkelas,
+			'absensi' => $absensi
+		];
+		
+		$this->load->view('_templates/dashboard/_header.php', $data);
+		$this->load->view('absensi/detail_absensi');
+		$this->load->view('_templates/dashboard/_footer.php');
+
+		// print_r($data['absensi']);
+
+	}
+
+	function update_absensi(){
+		$id_pertemuan = $_POST['id_pertemuan'];
+		$id_mahasiswa = $_POST['id_mahasiswa'];
+		$keterangan    = $_POST['keterangan'];
+		date_default_timezone_set("Asia/Jakarta");
+		$tanggalsekarang = date('Y-m-d H:i:s');
+
+		$data = array();
+		
+		$index = 0; 
+		if(is_array($id_pertemuan) || is_object($id_pertemuan))
+		{
+			foreach($id_pertemuan as $dataId){ 
+			array_push($data, array(
+				'id_pertemuan'=>$dataId,
+				'id_mahasiswa'=>$id_mahasiswa[$index],
+				'keterangan'  =>$keterangan[$index],
+				'ttd_digital'  => '',  
+				'waktu'		=> $tanggalsekarang
+			));
+			
+			$index++;
+			}
+
+		}
+		
+		$sql = $this->pertemuan->insert_batch($data);
+
+		echo "<script>alert('Suksen Menyimpan Data');</script>";
+		redirect('absensi/tampil_absensi/'.$id_pertemuan[0]);
+		// print_r($id_pertemuan);
+	}
+
+
 }

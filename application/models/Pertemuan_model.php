@@ -5,9 +5,10 @@ class Pertemuan_model extends CI_Model{
 
     public function getDataPertemuan($id)
     {
-        $this->datatables->select('a.id_pertemuan, a.token, a.nama_pertemuan, a.materi, b.nama_matkul, a.file_materi, a.tanggal_mulai, a.tanggal_selesai');
+        $this->datatables->select('a.id_pertemuan, a.token, a.nama_pertemuan, a.materi, b.nama_matkul, a.file_materi, a.tanggal_mulai, a.tanggal_selesai, c.nama_kelas');
         $this->datatables->from('m_pertemuan a');
         $this->datatables->join('matkul b', 'a.id_matkul = b.id_matkul');
+        $this->datatables->join('kelas c', 'a.id_kelas = c.id_kelas');
         if($id!==null){
             $this->datatables->where('id_dosen', $id);
         }
@@ -17,15 +18,14 @@ class Pertemuan_model extends CI_Model{
 
     public function getListPertemuan($id, $kelas)
     {
-        $this->datatables->select("a.id_pertemuan, e.nama_dosen, d.nama_kelas, a.nama_pertemuan, a.materi, a.file_materi,  b.nama_matkul, a.tanggal_mulai, a.tanggal_selesai, (SELECT COUNT(id) FROM h_absensi h WHERE h.id_mahasiswa = {$id} AND h.id_pertemuan = a.id_pertemuan) AS status, 
+        $this->datatables->select("a.id_pertemuan, e.nama_dosen, d.nama_kelas, a.nama_pertemuan, a.materi, a.file_materi,  b.nama_matkul, a.tanggal_mulai, a.tanggal_selesai, (SELECT COUNT(id_absensi) FROM h_absensi h WHERE h.id_mahasiswa = {$id} AND h.id_pertemuan = a.id_pertemuan) AS status, 
         (SELECT keterangan FROM h_absensi h WHERE h.id_mahasiswa = {$id} AND h.id_pertemuan = a.id_pertemuan) AS keterangan, 
         date_format(a.tanggal_mulai,'%m-%d-%Y %H:%i') as tanggal_mulai, date_format(a.tanggal_selesai,'%m-%d-%Y %H:%i') as tanggal_selesai");
         $this->datatables->from('m_pertemuan a');
         $this->datatables->join('matkul b', 'a.id_matkul = b.id_matkul');
-        $this->datatables->join('kelas_dosen c', "a.id_dosen = c.dosen_id");
-        $this->datatables->join('kelas d', 'c.kelas_id = d.id_kelas');
-        $this->datatables->join('dosen e', 'e.id_dosen = c.dosen_id');
-        $this->datatables->where('d.id_kelas', $kelas);
+        $this->datatables->join('kelas d', 'a.id_kelas = d.id_kelas');
+        $this->datatables->join('dosen e', 'e.id_dosen = a.id_dosen');
+        $this->datatables->where('a.id_kelas', $kelas);
         return $this->datatables->generate();
     }
 
@@ -72,6 +72,48 @@ class Pertemuan_model extends CI_Model{
             insert into h_absensi (id_pertemuan, id_mahasiswa, ttd_digital, waktu, keterangan) values ('$id', '$mahasiswa', '$image_name', '$jamsekarang', '$hadir')
         ");
         return $query;
+    }
+
+    public function getRekapAbsensi($nip = null)
+    {
+        $this->datatables->select('b.id_pertemuan, b.nama_pertemuan, b.materi, b.tanggal_mulai, b.tanggal_selesai, e.nama_kelas');
+        $this->datatables->select('c.nama_matkul, d.nama_dosen');
+        $this->datatables->from('m_pertemuan b');
+        $this->datatables->join('h_absensi a', 'a.id_pertemuan = b.id_pertemuan' , 'left');
+        $this->datatables->join('matkul c', 'b.id_matkul = c.id_matkul');
+        $this->datatables->join('dosen d', 'b.id_dosen = d.id_dosen');
+        $this->datatables->join('kelas e', 'b.id_kelas = e.id_kelas');
+        $this->datatables->group_by('b.id_pertemuan');
+        if($nip !== null){
+            $this->datatables->where('d.nip', $nip);
+        }
+        return $this->datatables->generate();
+    }
+
+    function get_all_kelas(){
+        $query = $this->db->query("
+            select * from kelas order by nama_kelas asc
+        ");
+        return $query;
+    }
+
+    function detail_absensi($kelas, $id_pertemuan){
+        $query = $this->db->query("
+        select a.*, (select waktu  from h_absensi b  WHERE  b.id_mahasiswa = a.id_mahasiswa and b.id_pertemuan = '$id_pertemuan') as waktu, (select keterangan  from h_absensi b  WHERE  b.id_mahasiswa = a.id_mahasiswa and b.id_pertemuan = '$id_pertemuan') as keterangan  from mahasiswa a
+        where a.kelas_id = '$kelas'
+        ");
+        return $query;
+    }
+
+    function get_kelas($id){
+        $query = $this->db->query("
+            select a.*, b.* from m_pertemuan a join kelas b on a.id_kelas = b.id_kelas where a.id_pertemuan = '$id'
+        ");
+        return $query;  
+    }
+
+    function insert_batch($data){
+        return $this->db->insert_batch('h_absensi', $data);
     }
 
 }
