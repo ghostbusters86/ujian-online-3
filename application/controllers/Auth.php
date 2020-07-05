@@ -1,5 +1,7 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
+	use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
 
 class Auth extends CI_Controller
 {
@@ -13,6 +15,10 @@ class Auth extends CI_Controller
 		$this->load->helper(['url', 'language']);
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 		$this->lang->load('auth');
+
+		require APPPATH.'libraries/PHPmailer/src/Exception.php';
+        require APPPATH.'libraries/PHPmailer/src/PHPMailer.php';
+        require APPPATH.'libraries/PHPmailer/src/SMTP.php';
 	}
 
 	public function output_json($data)
@@ -183,9 +189,55 @@ class Auth extends CI_Controller
 
 			if ($forgotten)
 			{
+				$email_tujuan = $this->input->post('identity');
+				$code = uniqid(true); //Untuk kode atau parameter acak
+				// PHPMailer object
+				$response = false;
+				$mail = new PHPMailer();
+		
+				// SMTP configuration
+				$mail->isSMTP();
+				$mail->Host     = 'smtp.gmail.com'; //sesuaikan sesuai nama domain hosting/server yang digunakan
+				$mail->SMTPAuth = true;
+				$mail->Username = 'akuncocbos@gmail.com'; // user email
+				$mail->Password = 'golekiDewe4y0'; // password email
+				$mail->SMTPSecure = 'ssl';
+				$mail->Port     = 465;
+		
+				$mail->setFrom('akuncocbos@gmail.com', ''); // user email
+				$mail->addReplyTo('no-reply@gmail.com', ''); //user email
+		
+				// Add a recipient
+				$mail->addAddress($email_tujuan); //email tujuan pengiriman email
+				
+				$url = "http://" . $_SERVER["HTTP_HOST"] .dirname($_SERVER["PHP_SELF"]). "/rst_pwd?reset=$code";
+				// Email subject
+				$mail->Subject = 'Link reset password'; //subject email
+		
+				// Set email format to HTML
+				$mail->isHTML(true);
+		
+				// Email body content
+				
+
+				$mailContent   = "<h1>Permintaan reset password</h1><p> Klik <a href='$url'>link ini</a> untuk mereset password, link akan kadaluarsa selama 5 menit</p>" ;
+
+				$mail->Body = $mailContent;
+		
+				// Send email
+				if(!$mail->send()){
+					echo 'Message could not be sent.';
+					echo 'Mailer Error: ' . $mail->ErrorInfo;
+				}else{
+					$startTime = date("Y-m-d H:i:s");
+					$cenvertedTime = date('Y-m-d H:i:s',strtotime('+5 minutes',strtotime($startTime)));
+					$this->load->model('reset_password_model');
+					$this->reset_password_model->insert_data($email_tujuan, $code, $cenvertedTime);
+					$this->session->set_flashdata('success', $this->ion_auth->messages());
+					redirect("auth/forgot_password", 'refresh'); //we should display a confirmation page here instead of the login page
+				}
 				// if there were no errors
-				$this->session->set_flashdata('success', $this->ion_auth->messages());
-				redirect("auth/forgot_password", 'refresh'); //we should display a confirmation page here instead of the login page
+				
 			}
 			else
 			{
@@ -363,6 +415,24 @@ class Auth extends CI_Controller
 		if ($returnhtml)
 		{
 			return $view_html;
+		}
+	}
+
+	function rst_pwd(){
+		$id = $this->input->get('reset');
+		// echo $id;
+		$this->load->model('reset_password_model');
+		$cek = $this->reset_password_model->cekdata($id)->row();
+		$tanggalsekarang = date('Y-m-d H:i:s');
+		if($tanggalsekarang > $cek->kadaluarsa){
+			show_404();
+		}else{
+			$this->data['token'] = [
+				'email' 	=> $cek->email,
+			];
+			$this->load->view('_templates/auth/_header', $this->data);
+			$this->load->view('auth/rst_pwd');
+			$this->load->view('_templates/auth/_footer');
 		}
 	}
 
