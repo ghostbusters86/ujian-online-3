@@ -199,12 +199,12 @@ class Auth extends CI_Controller
 				$mail->isSMTP();
 				$mail->Host     = 'smtp.gmail.com'; //sesuaikan sesuai nama domain hosting/server yang digunakan
 				$mail->SMTPAuth = true;
-				$mail->Username = 'akuncocbos@gmail.com'; // user email
-				$mail->Password = 'golekiDewe4y0'; // password email
+				$mail->Username = 'testinguser3000@gmail.com'; // user email
+				$mail->Password = 'iniTesting_user'; // password email
 				$mail->SMTPSecure = 'ssl';
 				$mail->Port     = 465;
 		
-				$mail->setFrom('akuncocbos@gmail.com', ''); // user email
+				$mail->setFrom('testinguser3000@gmail.com', ''); // user email
 				$mail->addReplyTo('no-reply@gmail.com', ''); //user email
 		
 				// Add a recipient
@@ -434,6 +434,42 @@ class Auth extends CI_Controller
 			$this->load->view('auth/rst_pwd');
 			$this->load->view('_templates/auth/_footer');
 		}
+	}
+
+	function rst_pwd_save(){
+		$reset = $this->input->post('id');
+		$password = $this->input->post('reset_pwd');
+		$this->load->model('reset_password_model');
+		$cek = $this->reset_password_model->cekdata($reset)->row();
+
+		// $this->form_validation->set_rules('new', $this->lang->line('reset_password_validation_new_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']');
+
+		// if ($this->form_validation->run() === FALSE){
+		// 	echo '<script type="text/javascript">
+		// 			alert("Gagal Reset Password");
+		// 			window.location = "'.base_url().'/auth/rst_pwd/reset='.$reset.'";
+		// 		</script>';
+		// }else{
+			$identity = $cek->email;
+			$change = $this->ion_auth->ubah_password($identity,$password);
+			if($change){
+				$data = [
+					'status' 	=> true,
+					'msg'		=> 'Berhasil'
+				];
+			}
+			else{
+				$data = [
+					'status' 	=> false,
+					'msg'		=> $this->ion_auth->errors()
+				];
+			}
+			// print_r($data);
+			echo '<script type="text/javascript">
+					alert("Password Berhasil diubah");
+					window.location = "'.base_url().'";
+				</script>';
+		// }
 	}
 
 }

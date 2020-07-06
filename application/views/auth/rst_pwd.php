@@ -6,21 +6,20 @@
 
 	<div class="login-box-body">
 		<h3 class="text-center mt-0 mb-4">
-			<?php echo lang('forgot_password_heading');?>
+			Reset Password
 		</h3>
 		<p class="login-box-msg">
 		</p>
 
-		<div id="infoMessage" class="text-red text-center"><?php echo $message;?></div>
-
-		<?php echo form_open("auth/forgot_password");?>
+		<?php echo form_open("auth/rst_pwd_save");?>
 
 			<p>
-				<label for="identity"><input type="text" name="rst_pwd" class="form-control" ></label> <br />
-				
+				<label for="identity">Masukkan Password Baru</label> <br />
+				<input type="password" name="reset_pwd" class="form-control" >
+				<input type="hidden" name="id" class="form-control" value="<?php echo $this->input->get('reset') ?>" readonly>
 			</p>
 
-			<p><?php echo form_submit('submit', 'Forgot Password', ['class'=>'btn btn-primary btn-flat btn-block']);?></p>
+			<p><?php echo form_submit('submit', 'Reset Password', ['class'=>'btn btn-primary btn-flat btn-block']);?></p>
 
 		<?php echo form_close();?>
 

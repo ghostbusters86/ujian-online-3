@@ -2775,4 +2775,11 @@ class Ion_auth_model extends CI_Model
 			return FALSE;
 		}
 	}
+
+
+	public function ubah_password($identity, $new){
+		$result = $this->_set_password_db($identity, $new);
+	}
+
+
 }
