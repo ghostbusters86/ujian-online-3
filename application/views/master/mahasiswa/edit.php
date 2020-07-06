@@ -13,7 +13,7 @@
                 <?=form_open('mahasiswa/save', array('id'=>'mahasiswa'), array('method'=>'edit', 'id_mahasiswa'=>$mahasiswa->id_mahasiswa))?>
                     <div class="form-group">
                         <label for="nim">NPP</label>
-                        <input value="<?=$mahasiswa->nim?>" autofocus="autofocus" onfocus="this.select()" placeholder="NPP" type="text" name="nim" class="form-control">
+                        <input value="<?=$mahasiswa->nim?>" autofocus="autofocus" onfocus="this.select()" placeholder="NPP" type="text" name="nim" class="form-control" maxlength="7">
                         <small class="help-block"></small>
                     </div>
                     <div class="form-group">
