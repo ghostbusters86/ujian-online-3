@@ -1,3 +1,5 @@
+<link href="<?php echo base_url() ?>assets/summernote/summernote.min.css" rel="stylesheet">
+
 <div class="row">
     <div class="col-sm-12">    
         <?=form_open_multipart('soal/save', array('id'=>'formsoal'), array('method'=>'add'));?>
@@ -36,7 +38,7 @@
                                 <small class="help-block" style="color: #dc3545"><?=form_error('file_soal')?></small>
                             </div>
                             <div class="form-group">
-                                <textarea name="soal" id="soal" class="form-control froala-editor"><?=set_value('soal')?></textarea>
+                                <textarea name="soal" id="soal" class="form-control summernote"><?=set_value('soal')?></textarea>
                                 <small class="help-block" style="color: #dc3545"><?=form_error('soal')?></small>
                             </div>
                         </div>
@@ -57,7 +59,7 @@
                                 <small class="help-block" style="color: #dc3545"><?=form_error('file_'.$abj)?></small>
                             </div>
                             <div class="form-group">
-                                <textarea name="jawaban_<?= $abj; ?>" id="jawaban_<?= $abj; ?>" class="form-control froala-editor"><?=set_value('jawaban_a')?></textarea>
+                                <textarea name="jawaban_<?= $abj; ?>" id="jawaban_<?= $abj; ?>" class="form-control summernote"><?=set_value('jawaban_a')?></textarea>
                                 <small class="help-block" style="color: #dc3545"><?=form_error('jawaban_'.$abj)?></small>
                             </div>
                         </div>
@@ -92,3 +94,12 @@
         <?=form_close();?>
     </div>
 </div>
+
+
+<script src="<?php echo base_url() ?>assets/summernote/summernote.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  $('.summernote').summernote();
+});
+</script>
